@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Doc-Find Admin</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#EDF1EE;--surf:#fff;--ink:#10231A;--mute:#5C6B63;--g:#0E6B47;--g2:#DCEDE3;--sun:#F5B700;--red:#C9382C;--red2:#FBE3E0;--amb:#8A6500;--amb2:#FCEFC4;--line:#D8E0DA;--onG:#fff;--side:#0B2A1E}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0A110D;--surf:#131E18;--ink:#E8F0EB;--mute:#93A59A;--g:#3DBF86;--g2:#1B3A2C;--red2:#3A1A17;--amb:#F5C84A;--amb2:#3A2F0E;--line:#26372E;--onG:#06140D;--side:#070E0A}}
+:root[data-theme="dark"]{--bg:#0A110D;--surf:#131E18;--ink:#E8F0EB;--mute:#93A59A;--g:#3DBF86;--g2:#1B3A2C;--red2:#3A1A17;--amb:#F5C84A;--amb2:#3A2F0E;--line:#26372E;--onG:#06140D;--side:#070E0A}
+*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font:14.5px/1.45 Figtree,system-ui,sans-serif}
+h1,h2,h3,.disp{font-family:'Bricolage Grotesque',Figtree,system-ui,sans-serif;letter-spacing:-.02em}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px)}
+.app{display:grid;grid-template-columns:232px 1fr;height:100%}
+aside{background:var(--side);color:#E8F0EB;display:flex;flex-direction:column;padding:18px 12px;gap:4px;overflow:auto}
+.brand{display:flex;align-items:center;gap:10px;padding:4px 10px 18px;font:800 20px 'Bricolage Grotesque',sans-serif}
+.brand svg{width:32px;height:32px}.brand small{display:block;font:500 11px Figtree;opacity:.6;margin-top:-3px}
+.nv{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:12px;color:#B9CBC1;font-weight:500;text-align:left;width:100%;position:relative;transition:.2s}
+.nv:hover{background:#ffffff12;color:#fff}
+.nv.on{background:var(--g);color:var(--onG)}
+.nv svg{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.nv b{margin-left:auto;background:var(--sun);color:#111;border-radius:99px;font-size:11px;padding:0 7px;min-width:20px;text-align:center}
+.me{margin-top:auto;display:flex;gap:10px;align-items:center;padding:12px 10px;border-top:1px solid #ffffff22;font-size:13px}
+.ava{flex:none;width:36px;height:36px;border-radius:50%;background:var(--sun);color:#111;display:grid;place-items:center;font-weight:800}
+.main{display:flex;flex-direction:column;min-width:0;height:100%}
+.tb{display:flex;align-items:center;gap:14px;padding:14px 26px;background:var(--surf);border-bottom:1px solid var(--line)}
+.tb h1{font-size:22px;flex:none}
+.srch{flex:1;max-width:420px;margin-left:auto}
+.srch input{width:100%;background:var(--bg);border:1.5px solid transparent;border-radius:12px;padding:9px 14px;font:inherit;color:inherit}
+.srch input:focus{border-color:var(--g);outline:0}
+main{flex:1;overflow:auto;padding:22px 26px 40px;animation:in .4s both}
+@keyframes in{from{opacity:0;transform:translateY(10px)}}
+.card{background:var(--surf);border:1px solid var(--line);border-radius:18px;padding:18px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.kpi{animation:in .5s both}.kpi small{color:var(--mute);font-weight:500}.kpi .n{font:800 34px 'Bricolage Grotesque',sans-serif;line-height:1.1;margin-top:4px}
+.kpi .d{font-size:12.5px;margin-top:2px;color:var(--g);font-weight:600}.kpi .d.w{color:var(--amb)}
+.g2{display:grid;grid-template-columns:1.6fr 1fr;gap:14px;margin-top:14px}
+.chart{display:flex;align-items:flex-end;gap:14px;height:190px;padding-top:12px}
+.chart>div{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end}
+.bars{display:flex;gap:4px;align-items:flex-end;height:100%;width:100%;justify-content:center}
+.bars i{width:38%;max-width:22px;border-radius:6px 6px 0 0;background:var(--g);transform-origin:bottom;animation:grow .8s cubic-bezier(.2,1,.3,1) both}
+.bars i.b{background:var(--sun)}
+@keyframes grow{from{transform:scaleY(0)}}
+.chart span{font-size:12px;color:var(--mute)}
+.lg{display:flex;gap:14px;font-size:12.5px;color:var(--mute);margin-top:6px}.lg i{display:inline-block;width:10px;height:10px;border-radius:3px;background:var(--g);margin-right:5px}.lg i.b{background:var(--sun)}
+.act{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:13.5px}.act:last-child{border:0}
+.act i{flex:none;width:9px;height:9px;border-radius:50%;background:var(--g);margin-top:6px}.act i.s{background:var(--red)}.act small{color:var(--mute);display:block}
+.md{display:grid;grid-template-columns:340px 1fr;gap:16px;align-items:start}
+.ml{display:grid;gap:10px}
+.it{display:flex;gap:12px;text-align:left;width:100%;padding:12px;border:1.5px solid var(--line);border-radius:16px;background:var(--surf);transition:.25s;animation:in .4s both}
+.it:hover{border-color:var(--g)}.it.on{border-color:var(--g);background:var(--g2)}
+.it.out{opacity:0;transform:translateX(-30px);height:0;padding:0;margin:0;border:0;overflow:hidden}
+.it .t{font-weight:600}.it .s{color:var(--mute);font-size:12.5px}
+.pill{display:inline-block;font-size:11.5px;font-weight:600;padding:2px 9px;border-radius:99px;background:var(--g2);color:var(--g)}
+.pill.w{background:var(--amb2);color:var(--amb)}.pill.r{background:var(--red2);color:var(--red)}.pill.m{background:var(--bg);color:var(--mute)}
+.mdet{display:grid;gap:14px;animation:in .35s both}
+.back{display:none;font-weight:600;color:var(--g)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.lab{font:600 12px Figtree;color:var(--mute);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+/* document view */
+.dv{--c:#2E7D5B;border:2px solid var(--c);border-radius:14px;background:color-mix(in srgb,var(--c) 10%,#fff);color:#111;padding:10px 12px 12px;position:relative;overflow:hidden}
+.dv.pass{--c:#274C9B}.dv.birth{--c:#B4741C}.dv.lic{--c:#8A3AA3}.dv.other{--c:#5C6B63}
+.dvh{display:flex;justify-content:space-between;font-size:10px;font-weight:700;color:var(--c);border-bottom:1.5px solid var(--c);padding-bottom:5px;margin-bottom:8px}
+.dvb{display:flex;gap:12px}.ph{flex:none;width:68px;height:84px;border-radius:8px;background:radial-gradient(circle at 50% 36%,#6a8c95 0 17%,transparent 18%),linear-gradient(#9bb,#567);transition:filter .25s}
+.fl{flex:1;display:grid;gap:6px;font-size:12.5px;align-content:start}.fl i{display:block;font-style:normal;font-size:9.5px;color:#555;text-transform:uppercase;letter-spacing:.05em}
+.fl u{display:block;height:13px;background:#111;border-radius:2px;width:80%;animation:in .3s both}
+.lock{position:absolute;inset:0;background:#0b1a13cc;backdrop-filter:blur(6px);display:grid;place-items:center;text-align:center;color:#fff;padding:14px;z-index:2}
+.lock button{margin-top:8px}
+.btn{background:var(--g);color:var(--onG);font-weight:600;border-radius:12px;padding:10px 16px;transition:.2s}
+.btn:hover{filter:brightness(1.08)}.btn:active{transform:scale(.97)}
+.btn.alt{background:var(--g2);color:var(--g)}.btn.red{background:var(--red2);color:var(--red)}.btn.sm{padding:6px 12px;font-size:13px;border-radius:10px}
+.btn[disabled]{opacity:.4;pointer-events:none}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.tg{display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}.tg:last-child{border:0}.tg span{flex:1}
+.sw{flex:none;width:44px;height:26px;border-radius:99px;background:var(--line);position:relative;transition:.25s}
+.sw::after{content:"";position:absolute;left:3px;top:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.25s cubic-bezier(.3,1.5,.5,1);box-shadow:0 1px 3px #0004}
+.sw.on{background:var(--g)}.sw.on::after{transform:translateX(18px)}
+input[type=range]{accent-color:var(--g);width:100%}
+select,.in{background:var(--bg);color:var(--ink);border:1.5px solid transparent;border-radius:10px;padding:9px 11px;font:inherit;width:100%}
+select:focus,.in:focus{border-color:var(--g);outline:0}
+.chips{display:flex;gap:6px;flex-wrap:wrap}.chip{padding:5px 12px;border-radius:99px;border:1.5px solid var(--line);font-size:13px;font-weight:500;transition:.2s}.chip.on{background:var(--g);border-color:var(--g);color:var(--onG)}
+table{width:100%;border-collapse:collapse;font-size:13.5px}th{text-align:left;color:var(--mute);font-weight:600;font-size:12px;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:11px 10px;border-bottom:1px solid var(--line);vertical-align:middle}tr:last-child td{border:0}tbody tr{animation:in .35s both}
+.tw{overflow-x:auto}
+.kv{display:grid;grid-template-columns:130px 1fr;gap:6px 12px;font-size:13.5px}.kv>:nth-child(odd){color:var(--mute)}
+.cmp{display:grid;grid-template-columns:1fr 1fr 40px;gap:8px 12px;font-size:13.5px;align-items:center}.cmp b.h{font-size:11.5px;color:var(--mute);font-weight:600}
+.ok{color:var(--g);font-weight:800}.no{color:var(--red);font-weight:800}
+.msgs{display:grid;gap:8px;max-height:210px;overflow:auto;padding:4px 0}
+.m{max-width:82%;padding:8px 12px;border-radius:14px;font-size:13.5px;animation:in .3s both}.m.u{background:var(--bg);border-bottom-left-radius:4px}.m.a{background:var(--g);color:var(--onG);justify-self:end;border-bottom-right-radius:4px}
+.empty{text-align:center;color:var(--mute);padding:50px 20px}
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 24px);transform:translate(-50%,160%);background:var(--ink);color:var(--surf);padding:12px 18px;border-radius:14px;z-index:60;transition:.4s cubic-bezier(.2,1.2,.3,1);font-weight:500;max-width:92vw}.toast.on{transform:translate(-50%,0)}
+.scrim{position:fixed;inset:0;background:#0007;z-index:30;opacity:0;pointer-events:none;transition:.3s}.scrim.on{opacity:1;pointer-events:auto}
+.sheet{position:fixed;left:50%;bottom:0;width:min(520px,100%);background:var(--surf);border-radius:24px 24px 0 0;padding:22px 22px calc(env(safe-area-inset-bottom,0px) + 22px);z-index:31;transform:translate(-50%,105%);transition:transform .4s cubic-bezier(.2,.9,.2,1);max-height:90dvh;overflow:auto}.sheet.on{transform:translate(-50%,0)}
+.sheet h2{font-size:22px;margin-bottom:6px}.sheet .in,.sheet select{margin:6px 0 12px}
+.prog{height:8px;background:var(--bg);border-radius:9px;overflow:hidden;margin:14px 0}.prog i{display:block;height:100%;width:0;background:var(--g);transition:width 1.2s}
+.banner{display:flex;gap:10px;background:var(--amb2);color:var(--amb);border-radius:14px;padding:11px 14px;font-size:13.5px;margin-bottom:14px}
+@media (max-width:980px){.kpis{grid-template-columns:1fr 1fr}.g2{grid-template-columns:1fr}.two{grid-template-columns:1fr}}
+@media (max-width:820px){
+ .app{grid-template-columns:1fr;grid-template-rows:1fr auto}
+ aside{grid-row:2;flex-direction:row;padding:6px 6px calc(env(safe-area-inset-bottom,0px) + 6px);justify-content:space-around;overflow-x:auto;gap:0}
+ .brand,.me{display:none}.nv{flex-direction:column;gap:2px;padding:6px 10px;font-size:10.5px;width:auto;flex:1;align-items:center;min-width:56px}.nv b{position:absolute;top:0;right:6px;margin:0}
+ .tb{padding:12px 16px}.srch{display:none}.tb h1{font-size:19px}main{padding:16px 14px 30px}
+ .md{grid-template-columns:1fr}.md.sel .ml{display:none}.md:not(.sel) .mdet{display:none}.back{display:inline-block}
+ .kv{grid-template-columns:100px 1fr}
+}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important}}
+</style></head>
+<body>
+<div class="app">
+ <aside id="side"></aside>
+ <div class="main"><header class="tb"><h1 id="vt"></h1><div class="srch"><input id="gs" placeholder="Search listings and press Enter" aria-label="Search"></div></header><main id="view"></main></div>
+</div>
+<div class="toast" id="toast"></div><div class="scrim" id="scrim" onclick="closeSheet()"></div><div class="sheet" id="sheet"></div>
+<script>
+const $=s=>document.querySelector(s);
+const TL={id:'ID card',pass:'Passport',birth:'Birth certificate',lic:'Driver’s licence',other:'Student card'};
+const IC={overview:'<rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/>',queue:'<path d="M4 6h16M4 12h16M4 18h10"/>',claims:'<path d="M4 5h16v11H9l-5 4z"/>',listings:'<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/>',fraud:'<path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17h.01"/>',audit:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',settings:'<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/>'};
+const NAV=[['overview','Overview'],['queue','Review queue'],['claims','Claims'],['listings','Listings'],['fraud','Fraud reports'],['audit','Audit log'],['settings','Settings']];
+const dd=(n,u,b,a)=>({name:n,num:u,dob:b,addr:a});
+let Q=[
+ {id:1,type:'id',town:'Douala',spot:'Akwa, near Rond-point Deido',ago:'2 h ago',finder:'Paul Mbarga',tel:'677 12 04 55',q:'Sharp',consent:[1,1,1],d:dd('Kevin Nkeng','1020 4457 8812','12 Mar 1996','Bonanjo, Douala')},
+ {id:2,type:'pass',town:'Yaoundé',spot:'Mvan bus park',ago:'5 h ago',finder:'Sandrine Ewane',tel:'690 55 21 08',q:'Slightly blurry',consent:[1,1,1],d:dd('Marie Tchoua','CE 0481 2290','04 Aug 1991','Bastos, Yaoundé')},
+ {id:3,type:'birth',town:'Bafoussam',spot:'Marché A',ago:'1 d ago',finder:'Hamidou Njoya',tel:'651 90 33 17',q:'Sharp',consent:[1,1,1],d:dd('Emmanuel Abena','N° 2209/2001','22 Jan 2001','Bafoussam II')},
+ {id:4,type:'lic',town:'Douala',spot:'Bonabéri ferry quay',ago:'1 d ago',finder:'Ines Kameni',tel:'699 04 76 62',q:'Sharp',consent:[1,1,0],d:dd('Felix Bella','PC 77 301 884','30 Sep 1988','Bonabéri, Douala')},
+ {id:5,type:'id',town:'Buea',spot:'University of Buea gate',ago:'2 d ago',finder:'Collins Ndi',tel:'670 31 18 94',q:'Too dark: retake advised',consent:[1,1,1],d:dd('Sylvie Mbella','1018 2231 4470','17 Jun 1999','Molyko, Buea')},
+ {id:6,type:'other',town:'Yaoundé',spot:'Ngoa-Ekélé',ago:'3 d ago',finder:'Aïcha Bello',tel:'655 78 02 41',q:'Sharp',consent:[1,1,1],d:dd('Pierre Lontsi','UY1-22-0931','05 Nov 2002','Ngoa-Ekélé')}];
+let C=[
+ {id:1,type:'id',town:'Douala',who:'Kevin Nkeng',tel:'677 98 10 22',ago:'12 min ago',ques:'Which town issued your card?',exp:'Douala',got:'Douala',m:true,idp:true,risk:'Low',st:'new',sig:['Name matches document','Answer matches','ID photo attached'],msgs:[['u','Hello, I lost my ID card last Friday in a taxi.']],d:dd('Kevin Nkeng','1020 4457 8812','12 Mar 1996','Bonanjo')},
+ {id:2,type:'pass',town:'Yaoundé',who:'Marie Tchoua',tel:'690 21 77 03',ago:'1 h ago',ques:'What is your date of birth?',exp:'04 Aug 1991',got:'14 Aug 1991',m:false,idp:false,risk:'High',st:'new',sig:['Answer is close but wrong','No ID photo attached','Same phone number claimed 2 other documents'],msgs:[['u','That passport is mine, please call me.']],d:dd('Marie Tchoua','CE 0481 2290','04 Aug 1991','Bastos')},
+ {id:3,type:'birth',town:'Bafoussam',who:'Emmanuel Abena',tel:'651 02 45 90',ago:'3 h ago',ques:'What is your mother’s first name?',exp:'Rosine',got:'Rosine',m:true,idp:true,risk:'Low',st:'new',sig:['Answer matches','ID photo attached'],msgs:[['u','I need this for my university file.']],d:dd('Emmanuel Abena','N° 2209/2001','22 Jan 2001','Bafoussam II')},
+ {id:4,type:'lic',town:'Douala',who:'Felix Bella',tel:'699 17 30 55',ago:'5 h ago',ques:'Which date is printed as the issue date?',exp:'09 Feb 2021',got:'9/2/2021',m:true,idp:false,risk:'Medium',st:'new',sig:['Answer matches (different format)','No ID photo attached'],msgs:[['u','Is it at the ferry quay office?']],d:dd('Felix Bella','PC 77 301 884','30 Sep 1988','Bonabéri')}];
+let L=[
+ {id:101,type:'id',town:'Douala',days:2,st:'Live',views:84,cl:1},{id:102,type:'pass',town:'Yaoundé',days:4,st:'Live',views:61,cl:1},
+ {id:103,type:'birth',town:'Bafoussam',days:9,st:'Live',views:27,cl:1},{id:104,type:'lic',town:'Douala',days:12,st:'Live',views:40,cl:1},
+ {id:105,type:'id',town:'Garoua',days:16,st:'Live',views:33,cl:0},{id:106,type:'birth',town:'Bamenda',days:26,st:'Live',views:18,cl:0},
+ {id:107,type:'id',town:'Buea',days:31,st:'Recovered',views:96,cl:1},{id:108,type:'pass',town:'Douala',days:40,st:'Archived',views:12,cl:0}];
+let F=[
+ {id:1,who:'Marie Tchoua',why:'Wrong birth date in proof, no ID photo, and the same number claimed 2 other documents this week.',by:'Automatic rule',sev:'High',st:'open'},
+ {id:2,who:'Unknown claimant (+237 655 ••• 41)',why:'Finder reported being asked to hand over a document outside the platform.',by:'Finder report',sev:'Medium',st:'open'},
+ {id:3,who:'Duplicate account: R. Fotso',why:'Two accounts sharing one phone number, both claiming passports.',by:'Automatic rule',sev:'Low',st:'open'}];
+let A=[{t:'09:12',w:'Admin Antony approved listing: ID card · Douala',s:0},{t:'09:05',w:'Admin Antony revealed an original document photo (reason: redaction)',s:1},{t:'Yesterday',w:'Admin Antony verified claim and scheduled handoff: Birth certificate · Bafoussam',s:0},{t:'Yesterday',w:'System archived 2 listings after 30 days of inactivity',s:0}];
+const S={v:'overview',sel:{q:null,c:null},lq:'',lf:'All',cfg:{days:30,proof:true,phone:true,sms:true,retain:30,reveal:true},rd:{},rv:{}};
+const wide=()=>innerWidth>820;
+const log=(w,s=0)=>A.unshift({t:'Just now',w:'Admin Antony '+w,s});
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove('on'),2800)}
+function openSheet(h){$('#sheet').innerHTML=h;$('#scrim').classList.add('on');$('#sheet').classList.add('on')}
+function closeSheet(){$('#scrim').classList.remove('on');$('#sheet').classList.remove('on')}
+const mask=n=>n.split(' ').map(w=>w[0]+'•'.repeat(Math.max(3,w.length-1))).join(' ');
+const red0=()=>({name:true,num:true,photo:true,dob:true,addr:true,blur:7});
+/* document renderer: r=null shows original */
+function dv(t,d,r,locked){const f=(k,l,v)=>`<div><i>${l}</i>${r&&r[k]&&k!=='name'?'<u></u>':(r&&k==='name'&&r.name?mask(v):v)}</div>`;
+ return `<div class="dv ${t}">${locked?'<div class="lock"><div>🔒 Original is hidden<br><small>Viewing is logged</small><br><button class="btn sm" onclick="reveal()">Reveal original</button></div></div>':''}<div class="dvh"><span>${TL[t].toUpperCase()}</span><span>REPUBLIC OF CAMEROON</span></div><div class="dvb"><div class="ph" style="${r&&r.photo?'filter:blur('+r.blur+'px)':''}"></div><div class="fl">${f('name','Name',d.name)}${f('num','Number',d.num)}${f('dob','Date of birth',d.dob)}${f('addr','Address',d.addr)}</div></div></div>`}
+/* nav + routing */
+function side(){$('#side').innerHTML=`<div class="brand"><svg viewBox="0 0 32 32"><rect width="32" height="32" rx="9" fill="var(--g)"/><rect x="8" y="7" width="13" height="17" rx="2" fill="none" stroke="var(--onG)" stroke-width="2"/><circle cx="21" cy="21" r="5" fill="var(--sun)" stroke="var(--g)" stroke-width="2"/></svg><div>Doc-Find<small>Admin console</small></div></div>`+NAV.map(([k,l])=>{const n=k==='queue'?Q.length:k==='claims'?C.filter(c=>c.st==='new').length:k==='fraud'?F.filter(f=>f.st==='open').length:0;return `<button class="nv ${S.v===k?'on':''}" onclick="location.hash='${k}'"><svg viewBox="0 0 24 24">${IC[k]}</svg>${l}${n?`<b>${n}</b>`:''}</button>`}).join('')+`<div class="me"><div class="ava">AN</div><div>Antony<br><small style="opacity:.6">Moderator</small></div></div>`}
+function go(){const h=location.hash.slice(1);S.v=NAV.some(n=>n[0]===h)?h:'overview';render()}
+function render(){side();$('#vt').textContent=NAV.find(n=>n[0]===S.v)[1];const m=$('#view');m.style.animation='none';void m.offsetWidth;m.style.animation='';m.innerHTML=V[S.v]();count()}
+function count(){document.querySelectorAll('[data-n]').forEach(e=>{const to=+e.dataset.n,t0=performance.now();(function f(t){const p=Math.min(1,(t-t0)/800);e.textContent=Math.round(to*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(f)})(t0)})}
+const leave=(id,fn)=>{const e=document.querySelector(`[data-id="${id}"]`);if(e){e.classList.add('out');setTimeout(fn,320)}else fn()};
+const V={
+overview(){const live=L.filter(l=>l.st==='Live').length,rec=L.filter(l=>l.st==='Recovered').length+4;const D=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],a=[6,9,5,11,8,4,7],b=[3,5,4,7,6,2,4];
+ const k=[['Pending review',Q.length,'Oldest waiting 3 days',1],['Open claims',C.filter(c=>c.st==='new').length,'1 high-risk claim',1],['Live listings',live,'+3 this week',0],['Recovered this month',rec,'Avg 3.2 days to return',0]];
+ return `<div class="kpis">${k.map(([l,n,d,w],i)=>`<div class="card kpi" style="animation-delay:${i*70}ms"><small>${l}</small><div class="n" data-n="${n}">0</div><div class="d ${w?'w':''}">${d}</div></div>`).join('')}</div>
+ <div class="g2"><div class="card"><h3>This week</h3><div class="chart">${D.map((d,i)=>`<div><div class="bars"><i style="height:${a[i]/12*100}%;animation-delay:${i*70}ms"></i><i class="b" style="height:${b[i]/12*100}%;animation-delay:${i*70+90}ms"></i></div><span>${d}</span></div>`).join('')}</div><div class="lg"><span><i></i>Found documents submitted</span><span><i class="b"></i>Returned to owners</span></div></div>
+ <div class="card"><h3>Recent activity</h3>${A.slice(0,5).map(x=>`<div class="act"><i class="${x.s?'s':''}"></i><div>${x.w}<small>${x.t}</small></div></div>`).join('')}</div></div>
+ ${Q.length?`<div class="card" style="margin-top:14px;display:flex;gap:14px;align-items:center;flex-wrap:wrap"><div style="flex:1;min-width:200px"><h3>Needs attention</h3><span class="sub" style="color:var(--mute)">${Q.length} submissions are waiting for redaction and approval.</span></div><button class="btn" onclick="location.hash='queue'">Open review queue</button></div>`:''}`},
+queue(){const sel=S.sel.q??(wide()?Q[0]?.id:null),it=Q.find(x=>x.id===sel);
+ if(!Q.length)return `<div class="card empty"><div style="font-size:40px">✅</div><h3>Queue is clear</h3><p>New submissions from finders will appear here.</p></div>`;
+ return `<div class="md ${it?'sel':''}"><div class="ml">${Q.map((x,i)=>`<button class="it ${x.id===sel?'on':''}" data-id="${x.id}" style="animation-delay:${i*50}ms" onclick="S.sel.q=${x.id};render()"><div style="flex:1"><span class="pill ${x.q==='Sharp'?'':'w'}">${x.q}</span><div class="t" style="margin-top:4px">${TL[x.type]} · ${x.town}</div><div class="s">${x.spot}<br>Found by ${x.finder} · ${x.ago}</div></div></button>`).join('')}</div>${it?qd(it):'<div class="mdet"></div>'}</div>`},
+claims(){const sel=S.sel.c??(wide()?C[0]?.id:null),c=C.find(x=>x.id===sel);
+ return `<div class="md ${c?'sel':''}"><div class="ml">${C.map((x,i)=>`<button class="it ${x.id===sel?'on':''}" data-id="${x.id}" style="animation-delay:${i*50}ms" onclick="S.sel.c=${x.id};render()"><div style="flex:1"><span class="pill ${x.risk==='Low'?'':x.risk==='High'?'r':'w'}">${x.risk} risk</span> <span class="pill m">${{new:'New',handoff:'Handoff set',done:'Handed over',rejected:'Rejected',more:'Awaiting proof'}[x.st]}</span><div class="t" style="margin-top:4px">${x.who}</div><div class="s">${TL[x.type]} · ${x.town} · ${x.ago}</div></div></button>`).join('')}</div>${c?cd(c):'<div class="mdet"></div>'}</div>`},
+listings(){const rows=L.filter(l=>(S.lf==='All'||l.st===S.lf)&&(!S.lq||(TL[l.type]+l.town).toLowerCase().includes(S.lq.toLowerCase())));
+ return `<div class="banner"><span>⏱️</span><span>Listings with no activity for <b>${S.cfg.days} days</b> are archived automatically. Change this in Settings.</span></div>
+ <div class="card"><div class="row" style="margin-bottom:12px"><div class="chips">${['All','Live','Recovered','Archived'].map(f=>`<button class="chip ${S.lf===f?'on':''}" onclick="S.lf='${f}';render()">${f}</button>`).join('')}</div><input class="in" style="max-width:240px;margin-left:auto" placeholder="Filter by type or town" value="${S.lq}" oninput="S.lq=this.value;lrows()" aria-label="Filter"><button class="btn sm" onclick="bulk()">Bulk post (CSV)</button></div><div class="tw"><table><thead><tr><th>Document</th><th>Town</th><th>Online</th><th>Status</th><th>Views</th><th>Claims</th><th></th></tr></thead><tbody id="lb">${lr(rows)}</tbody></table></div></div>`},
+fraud(){return `<div class="two" style="grid-template-columns:repeat(auto-fill,minmax(320px,1fr))">${F.map((f,i)=>`<div class="card" style="animation:in .4s ${i*70}ms both"><div class="row" style="justify-content:space-between"><b>${f.who}</b><span class="pill ${f.sev==='High'?'r':f.sev==='Medium'?'w':'m'}">${f.sev}</span></div><p style="margin:8px 0;color:var(--mute)">${f.why}</p><small style="color:var(--mute)">Source: ${f.by}</small><div class="row" style="margin-top:12px">${f.st==='open'?`<button class="btn sm red" onclick="fz(${f.id},'Suspended')">Suspend user</button><button class="btn sm alt" onclick="fz(${f.id},'Dismissed')">Dismiss</button>`:`<span class="pill ${f.st==='Suspended'?'r':'m'}">${f.st}</span>`}</div></div>`).join('')}</div>`},
+audit(){return `<div class="card"><div class="row" style="margin-bottom:10px"><span style="color:var(--mute)">Every admin action is recorded. Opening an original document photo is flagged.</span><button class="btn sm alt" style="margin-left:auto" onclick="S.as=!S.as;render()">${S.as?'Show all':'Show sensitive only'}</button></div><div class="tw"><table><thead><tr><th>When</th><th>Event</th><th></th></tr></thead><tbody>${A.filter(x=>!S.as||x.s).map((x,i)=>`<tr style="animation-delay:${i*30}ms"><td style="white-space:nowrap">${x.t}</td><td>${x.w}</td><td>${x.s?'<span class="pill r">Sensitive</span>':''}</td></tr>`).join('')}</tbody></table></div></div>`},
+settings(){const sw=(k,l,s)=>`<div class="tg"><span><b>${l}</b><br><small style="color:var(--mute)">${s}</small></span><button class="sw ${S.cfg[k]?'on':''}" role="switch" aria-checked="${S.cfg[k]}" aria-label="${l}" onclick="S.cfg['${k}']=!S.cfg['${k}'];log('changed setting: ${l}');this.classList.toggle('on')"></button></div>`;
+ const se=(k,l,o)=>`<div class="tg"><span><b>${l}</b></span><select style="width:130px" onchange="S.cfg['${k}']=+this.value;log('changed setting: ${l} to '+this.value+' days');toast('Saved')">${o.map(d=>`<option ${S.cfg[k]===d?'selected':''} value="${d}">${d} days</option>`).join('')}</select></div>`;
+ return `<div class="two"><div class="card"><h3>Moderation</h3>${sw('proof','Require proof-of-ownership answer','Claimants must answer a hidden-detail question')}${sw('phone','Require finder phone consent','Needed to arrange the handoff')}${sw('sms','SMS claimants on status changes','Handoff and rejection messages')}</div><div class="card"><h3>Privacy (Law No. 2024/017)</h3>${sw('reveal','Log every original-photo view','Strongly recommended, cannot be disabled in production')}${se('days','Auto-archive inactive listings',[14,30,60])}${se('retain','Delete original photos after recovery',[7,30,90])}<p style="color:var(--mute);font-size:13px;margin-top:10px">Admins have no default access to originals. Each view needs a click and is written to the audit log.</p></div></div>`}};
+function qd(x){const r=S.rd[x.id]||(S.rd[x.id]=red0()),open=S.rv[x.id];
+ const cb=(k,l)=>`<div class="tg"><span>${l}</span><button class="sw ${r[k]?'on':''}" role="switch" aria-checked="${r[k]}" aria-label="${l}" onclick="S.rd[${x.id}].${k}=!S.rd[${x.id}].${k};pv(${x.id});this.classList.toggle('on')"></button></div>`;
+ return `<div class="mdet"><button class="back" onclick="S.sel.q=null;render()">← Back to queue</button>
+ <div class="two"><div class="card"><div class="lab"><span>ORIGINAL · ADMIN ONLY</span></div>${dv(x.type,x.d,null,!open)}</div><div class="card"><div class="lab"><span>PUBLIC LISTING PREVIEW</span><span class="pill">Live preview</span></div><div id="pv">${dv(x.type,x.d,r)}</div></div></div>
+ <div class="two"><div class="card"><div class="lab"><span>REDACTION</span></div>${cb('name','Partial name only (K••• N•••)')}${cb('num','Hide ID number')}${cb('dob','Hide date of birth')}${cb('addr','Hide address')}${cb('photo','Blur portrait photo')}<div style="margin-top:8px"><small style="color:var(--mute)">Blur strength</small><input type="range" min="2" max="14" value="${r.blur}" oninput="S.rd[${x.id}].blur=this.value;pv(${x.id})" aria-label="Blur strength"></div></div>
+ <div class="card"><div class="lab"><span>FINDER AND CONSENT</span></div><div class="kv"><span>Finder</span><b>${x.finder}</b><span>Phone</span><b>${x.tel}</b><span>Found at</span><b>${x.spot}, ${x.town}</b><span>Photo quality</span><b>${x.q}</b><span>Consent</span><span class="chips"><span class="pill ${x.consent[0]?'':'r'}">Photo ${x.consent[0]?'✓':'✗'}</span><span class="pill ${x.consent[1]?'':'r'}">Location ${x.consent[1]?'✓':'✗'}</span><span class="pill ${x.consent[2]?'':'w'}">Phone ${x.consent[2]?'✓':'✗'}</span></span></div></div></div>
+ <div class="card row"><button class="btn" onclick="approve(${x.id})" ${x.consent[0]&&x.consent[1]?'':'disabled'}>Approve and publish</button><button class="btn alt" onclick="retake(${x.id})">Ask for a better photo</button><button class="btn red" onclick="rejectQ(${x.id})">Reject</button>${x.consent.slice(0,2).every(Boolean)?'':'<small style="color:var(--red)">Photo and location consent required to publish.</small>'}</div></div>`}
+function pv(id){const x=Q.find(q=>q.id===id);$('#pv').innerHTML=dv(x.type,x.d,S.rd[id])}
+function reveal(){const x=Q.find(q=>q.id===(S.sel.q??Q[0].id));S.rv[x.id]=1;log('revealed an original document photo (reason: redaction)',1);toast('Original revealed and logged');render()}
+function approve(id){const x=Q.find(q=>q.id===id);leave(id,()=>{Q=Q.filter(q=>q.id!==id);L.unshift({id:200+id,type:x.type,town:x.town,days:0,st:'Live',views:0,cl:0});log('approved listing: '+TL[x.type]+' · '+x.town);S.sel.q=null;render();toast('Published with redaction. The finder was notified.')})}
+function retake(id){const x=Q.find(q=>q.id===id);log('asked finder for a better photo: '+TL[x.type]+' · '+x.town);toast('Message sent to '+x.finder)}
+function rejectQ(id){openSheet(`<h2>Reject submission</h2><p style="color:var(--mute)">The finder gets a short explanation.</p><select id="rr"><option>Not an official document</option><option>Duplicate of an existing listing</option><option>Photo unreadable after retake</option></select><div class="row"><button class="btn red" onclick="doRej(${id})">Reject</button><button class="btn alt" onclick="closeSheet()">Cancel</button></div>`)}
+function doRej(id){const r=$('#rr').value;closeSheet();leave(id,()=>{Q=Q.filter(q=>q.id!==id);log('rejected submission ('+r+')');S.sel.q=null;render();toast('Submission rejected')})}
+function cd(c){const al=c.st==='new'||c.st==='more';
+ return `<div class="mdet"><button class="back" onclick="S.sel.c=null;render()">← Back to claims</button>
+ <div class="two"><div class="card"><div class="lab"><span>PUBLIC LISTING</span></div>${dv(c.type,c.d,red0())}</div>
+ <div class="card"><div class="lab"><span>PROOF OF OWNERSHIP</span><span class="pill ${c.risk==='Low'?'':c.risk==='High'?'r':'w'}">${c.risk} risk</span></div><div class="cmp"><b class="h">Document says</b><b class="h">Claimant answered</b><b class="h"></b><span>${c.exp}</span><span>${c.got}</span><span class="${c.m?'ok':'no'}">${c.m?'✓':'✗'}</span></div><p style="color:var(--mute);font-size:12.5px;margin:8px 0">Question asked: “${c.ques}”</p><div style="display:grid;gap:5px;margin-top:6px">${c.sig.map(s=>`<div style="font-size:13px">${/wrong|No ID|Same/.test(s)?'⚠️':'✅'} ${s}</div>`).join('')}</div><div class="kv" style="margin-top:12px"><span>Claimant</span><b>${c.who}</b><span>Phone</span><b>${c.tel}</b><span>Status</span><b>${{new:'Awaiting review',handoff:'Handoff scheduled',done:'Handed over',rejected:'Rejected',more:'Awaiting more proof'}[c.st]}</b></div></div></div>
+ <div class="card"><div class="lab"><span>CONVERSATION (claimant ↔ admin)</span></div><div class="msgs" id="ms">${c.msgs.map(m=>`<div class="m ${m[0]}">${m[1]}</div>`).join('')}</div>${al||c.st==='handoff'?`<div class="chips" style="margin:8px 0">${['Please bring your original ID to the handoff point.','Can you send a clearer photo of your ID?','Your claim is verified.'].map(q=>`<button class="chip" onclick="say(${c.id},this.textContent)">${q}</button>`).join('')}</div><div class="row"><input class="in" id="ci" style="flex:1;width:auto" placeholder="Write a reply" onkeydown="if(event.key==='Enter')say(${c.id},this.value)" aria-label="Reply"><button class="btn sm" onclick="say(${c.id},$('#ci').value)">Send</button></div>`:''}</div>
+ <div class="card row">${al?`<button class="btn" onclick="handSheet(${c.id})">Verify and arrange handoff</button><button class="btn alt" onclick="more(${c.id})">Request more proof</button><button class="btn red" onclick="rejC(${c.id})">Reject and flag</button>`:c.st==='handoff'?`<button class="btn" onclick="done(${c.id})">Mark as handed over</button>`:`<span class="pill m">No further action needed</span>`}</div></div>`}
+function say(id,t){t=(t||'').trim();if(!t)return;const c=C.find(x=>x.id===id);c.msgs.push(['a',t]);S.sel.c=id;render();setTimeout(()=>{c.msgs.push(['u','Thank you, I understand.']);if(S.v==='claims'&&S.sel.c===id)render()},1400)}
+function handSheet(id){const c=C.find(x=>x.id===id);openSheet(`<h2>Arrange handoff</h2><p style="color:var(--mute)">${c.who} will be told where to go. The finder’s details stay private.</p><label>Handoff point<select id="hp"><option>Doc-Find desk, Akwa (Douala)</option><option>Prefecture of Wouri</option><option>Doc-Find desk, Bastos (Yaoundé)</option><option>Partner: University administration</option></select></label><label>Date<select id="hd"><option>Tomorrow, 10:00</option><option>Tomorrow, 15:00</option><option>In 2 days, 10:00</option></select></label><div class="row"><button class="btn" onclick="doHand(${id})">Confirm and notify</button><button class="btn alt" onclick="closeSheet()">Cancel</button></div>`)}
+function doHand(id){const c=C.find(x=>x.id===id),p=$('#hp').value,d=$('#hd').value;closeSheet();c.st='handoff';c.msgs.push(['a','Your claim is verified. Please come to '+p+' on '+d+' with your original ID.']);log('verified claim and scheduled handoff: '+TL[c.type]+' · '+c.town);render();toast('Handoff scheduled and SMS sent')}
+function more(id){const c=C.find(x=>x.id===id);c.st='more';c.msgs.push(['a','Please send a clear photo of your own ID so we can confirm.']);log('requested more proof from '+c.who);render();toast('Request sent')}
+function rejC(id){const c=C.find(x=>x.id===id);c.st='rejected';c.msgs.push(['a','We could not verify this claim, so we cannot release the document.']);F.unshift({id:Date.now(),who:c.who,why:'Claim rejected for '+TL[c.type]+': proof did not match.',by:'Admin flag',sev:c.risk==='High'?'High':'Medium',st:'open'});log('rejected claim and flagged '+c.who,1);render();toast('Claim rejected and added to fraud reports')}
+function done(id){const c=C.find(x=>x.id===id);c.st='done';const l=L.find(l=>l.type===c.type&&l.town===c.town&&l.st==='Live');if(l)l.st='Recovered';log('marked handed over: '+TL[c.type]+' · '+c.town);render();toast('Marked as recovered. It left public search.')}
+function lr(rows){return rows.length?rows.map((l,i)=>`<tr style="animation-delay:${i*30}ms"><td><b>${TL[l.type]}</b></td><td>${l.town}</td><td>${l.days?l.days+' d':'Today'}</td><td><span class="pill ${l.st==='Live'?'':l.st==='Recovered'?'m':'w'}">${l.st}</span></td><td>${l.views}</td><td>${l.cl}</td><td style="text-align:right;white-space:nowrap">${l.st==='Live'?`<button class="btn sm alt" onclick="ls(${l.id},'Recovered')">Mark recovered</button> <button class="btn sm red" onclick="ls(${l.id},'Archived')">Archive</button>`:`<button class="btn sm alt" onclick="ls(${l.id},'Live')">Restore</button>`}</td></tr>`).join(''):'<tr><td colspan="7" class="empty">No listings match.</td></tr>'}
+function lrows(){$('#lb').innerHTML=lr(L.filter(l=>(S.lf==='All'||l.st===S.lf)&&(!S.lq||(TL[l.type]+l.town).toLowerCase().includes(S.lq.toLowerCase()))))}
+function ls(id,st){const l=L.find(x=>x.id===id);l.st=st;log('set listing '+TL[l.type]+' · '+l.town+' to '+st);render();toast('Listing '+st.toLowerCase())}
+function fz(id,st){const f=F.find(x=>x.id===id);f.st=st;log((st==='Suspended'?'suspended ':'dismissed report on ')+f.who,st==='Suspended'?1:0);render();toast(st==='Suspended'?'User suspended':'Report dismissed')}
+function bulk(){openSheet(`<h2>Bulk post from a partner</h2><p style="color:var(--mute)">Prefectures, consulates and universities can upload a CSV. Every row is redacted by the same rules and goes through the queue.</p><label>Partner institution<select id="pi"><option>Prefecture of Wouri</option><option>University of Yaoundé I</option><option>Consulate drop box</option></select></label><button class="btn" id="bb" onclick="doBulk()">Choose CSV (demo file)</button><div class="prog" id="pg" style="display:none"><i id="pf"></i></div><div id="bm"></div>`)}
+function doBulk(){const p=$('#pi').value;$('#bb').disabled=true;$('#pg').style.display='block';requestAnimationFrame(()=>$('#pf').style.width='100%');setTimeout(()=>{closeSheet();[['id','Douala'],['birth','Garoua'],['lic','Bamenda']].forEach(([t,town],i)=>Q.push({id:300+i+Date.now()%1000,type:t,town,spot:p,ago:'Just now',finder:p,tel:'Partner batch',q:'Sharp',consent:[1,1,1],d:dd('Sample Holder','0000 0000 0'+i,'01 Jan 1990',town)}));log('bulk-uploaded 3 documents from '+p);render();toast('3 documents added to the review queue')},1400)}
+$('#gs').addEventListener('keydown',e=>{if(e.key==='Enter'){S.lq=e.target.value;S.lf='All';location.hash='listings';if(S.v==='listings')render()}});
+addEventListener('hashchange',go);addEventListener('resize',()=>{if(S.v==='queue'||S.v==='claims')render()});
+go();
+</script>
+</body></html>

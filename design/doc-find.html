@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Doc-Find</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#E4EBE6;--surf:#fff;--ink:#10231A;--mute:#5C6B63;--g:#0E6B47;--g2:#DCEDE3;--sun:#F5B700;--red:#C9382C;--line:#D5DED8;--onG:#fff}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#070D0A;--surf:#14201A;--ink:#E8F0EB;--mute:#93A59A;--g:#3DBF86;--g2:#1B3A2C;--line:#26372E;--onG:#06140D}}
+:root[data-theme="dark"]{--bg:#070D0A;--surf:#14201A;--ink:#E8F0EB;--mute:#93A59A;--g:#3DBF86;--g2:#1B3A2C;--line:#26372E;--onG:#06140D}
+*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font:15px/1.45 Figtree,system-ui,sans-serif;display:flex;align-items:center;justify-content:center}
+h1,h2,h3,.disp{font-family:'Bricolage Grotesque',Figtree,system-ui,sans-serif;letter-spacing:-.02em}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+.phone{position:relative;width:min(100%,400px);height:min(100dvh,820px);background:var(--surf);overflow:hidden;border-radius:34px;box-shadow:0 0 0 9px #111,0 30px 70px rgba(0,0,0,.35)}
+@media (max-width:480px){.phone{border-radius:0;box-shadow:none;height:100dvh}}
+.top{padding:6px 20px 2px}
+.tab{position:absolute;inset:var(--tb) 0 calc(68px + env(safe-area-inset-bottom,0px));overflow:hidden;display:flex;flex-direction:column;opacity:0;pointer-events:none;transform:translateY(10px);transition:.3s}.tab>*{flex:none}
+.tab.on{opacity:1;pointer-events:auto;transform:none}
+.nav{position:absolute;left:0;right:0;bottom:0;height:calc(68px + env(safe-area-inset-bottom,0px));padding-bottom:env(safe-area-inset-bottom,0px);display:flex;background:var(--surf);border-top:1px solid var(--line);z-index:5}
+.nav button{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:11px;color:var(--mute);position:relative;font-weight:500}
+.nav button.on{color:var(--g)}
+.nav button.on::before{content:"";position:absolute;top:0;width:34px;height:3px;border-radius:0 0 3px 3px;background:var(--g);animation:pop .3s}
+.nav svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.badge{position:absolute;top:8px;right:calc(50% - 20px);background:var(--red);color:#fff;font-size:10px;border-radius:9px;padding:0 5px;min-width:16px;text-align:center}
+@keyframes pop{from{transform:scaleX(0)}}
+h1{font-size:clamp(22px,3.6vh,28px);line-height:1.1;font-weight:800}
+.sub{color:var(--mute);margin-top:4px}
+.field{display:flex;align-items:center;gap:10px;background:var(--bg);border-radius:14px;padding:0 14px;margin:8px 20px 0;height:44px;border:1.5px solid transparent;transition:.2s}
+.field:focus-within{border-color:var(--g)}
+.field input{flex:1;background:none;border:0;font:inherit;color:inherit;height:100%;outline:0}
+.field svg{width:20px;height:20px;stroke:var(--mute);fill:none;stroke-width:2;stroke-linecap:round}
+.chips{display:flex;gap:6px;flex-wrap:wrap;padding:8px 20px 2px}
+.chip{flex:none;padding:5px 12px;border-radius:99px;border:1.5px solid var(--line);font-weight:500;font-size:13px;transition:.2s}
+.chip.on{background:var(--g);border-color:var(--g);color:var(--onG);transform:scale(1.04)}
+.row2{display:flex;gap:10px;padding:8px 20px}
+select,.in{flex:1;min-width:0;background:var(--bg);color:var(--ink);border:1.5px solid transparent;border-radius:12px;padding:11px 12px;font:inherit;width:100%}
+select:focus,.in:focus{border-color:var(--g)}
+.meta{display:flex;justify-content:space-between;align-items:center;padding:6px 20px;color:var(--mute);font-size:13px}
+.link{color:var(--g);font-weight:600}
+.list{padding:0 20px;display:grid;gap:12px}
+.card{display:flex;gap:14px;text-align:left;background:var(--surf);border:1.5px solid var(--line);border-radius:18px;padding:12px;width:100%;transition:.2s;animation:in .4s both}
+.card:active{transform:scale(.98)}
+.card:hover{border-color:var(--g)}
+@keyframes in{from{opacity:0;transform:translateY(14px)}}
+.card .t{font-weight:600}
+.card .s{color:var(--mute);font-size:13px}
+.tag{display:inline-block;font-size:12px;font-weight:600;padding:2px 9px;border-radius:99px;background:var(--g2);color:var(--g);margin-bottom:5px}
+.empty{text-align:center;color:var(--mute);padding:40px 30px}
+/* redacted document art */
+.doc{--c:#2E7D5B;flex:none;width:92px;height:68px;border-radius:9px;background:color-mix(in srgb,var(--c) 14%,#fff);border:1.5px solid var(--c);position:relative;overflow:hidden;padding:6px;color:#000}
+.doc.id{--c:#2E7D5B}.doc.pass{--c:#274C9B}.doc.birth{--c:#B4741C}.doc.lic{--c:#8A3AA3}.doc.other{--c:#5C6B63}
+.doc .h{height:6px;border-radius:2px;background:var(--c);width:70%}
+.doc .p{position:absolute;left:6px;bottom:6px;width:30%;height:48%;border-radius:4px;background:linear-gradient(135deg,#9bb,#678);filter:blur(2.5px)}
+.doc .l{position:absolute;right:6px;left:42%;top:20px;display:grid;gap:5px}
+.doc .l u{display:block;height:6px;background:#111;border-radius:1px}
+.doc .st{position:absolute;right:5px;bottom:4px;font:800 8px 'Bricolage Grotesque',sans-serif;color:var(--c);border:1.5px solid var(--c);padding:0 3px;border-radius:3px;transform:rotate(-8deg);background:#fff9}
+.doc.big{width:100%;height:clamp(120px,21vh,190px);padding:14px;border-radius:16px}
+.doc.big .h{height:12px}.doc.big .l{top:44px;gap:12px;left:42%}.doc.big .l u{height:12px}.doc.big .st{font-size:14px;padding:1px 6px}
+.doc.big .p{left:14px;bottom:14px;filter:blur(5px)}
+.doc.big::after{content:"Redacted";position:absolute;left:14px;top:34px;font-size:11px;color:var(--mute);background:#fffd;padding:1px 7px;border-radius:99px}
+/* pages */
+.page{position:absolute;inset:0;background:var(--surf);z-index:8;transform:translateX(102%);transition:transform .38s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column}
+.page.open{transform:none}
+.bar{display:flex;align-items:center;gap:8px;padding:calc(env(safe-area-inset-top,0px) + 12px) 14px 8px}
+.bar button.b{width:40px;height:40px;border-radius:50%;background:var(--bg);display:grid;place-items:center;font-size:18px}
+.bar h2{font-size:18px}
+.body{flex:1;overflow:hidden;padding:6px 20px 12px}
+.foot{padding:12px 20px calc(env(safe-area-inset-bottom,0px) + 14px);border-top:1px solid var(--line)}
+.btn{width:100%;background:var(--g);color:var(--onG);font-weight:600;border-radius:14px;padding:14px;transition:.2s;position:relative;overflow:hidden}
+.btn:active{transform:scale(.97)}
+.btn.alt{background:var(--g2);color:var(--g)}
+.btn[disabled]{opacity:.4;pointer-events:none}
+.kv{display:grid;grid-template-columns:100px 1fr;gap:6px 10px;margin:10px 0;font-size:14px}
+.kv span:nth-child(odd){color:var(--mute)}
+.note{display:flex;gap:10px;background:var(--g2);border-radius:14px;padding:12px;font-size:13px;margin-top:12px}
+/* sheet */
+.scrim{position:absolute;inset:0;background:#0007;z-index:20;opacity:0;pointer-events:none;transition:.3s}
+.scrim.on{opacity:1;pointer-events:auto}
+.sheet{position:absolute;left:0;right:0;bottom:0;background:var(--surf);border-radius:26px 26px 0 0;z-index:21;padding:10px 20px calc(env(safe-area-inset-bottom,0px) + 20px);transform:translateY(105%);transition:transform .4s cubic-bezier(.2,.9,.2,1);max-height:92%;overflow:auto}
+.sheet.on{transform:none}
+.grab{width:40px;height:4px;border-radius:2px;background:var(--line);margin:0 auto 14px}
+label.lb{display:block;font-weight:600;margin:10px 0 5px;font-size:14px}
+/* stepper */
+.steps{display:flex;gap:6px;padding:4px 20px 10px}
+.steps i{flex:1;height:4px;border-radius:2px;background:var(--line);overflow:hidden;position:relative}
+.steps i::after{content:"";position:absolute;inset:0;background:var(--g);transform:scaleX(0);transform-origin:left;transition:.5s}
+.steps i.on::after{transform:none}
+.view{border-radius:20px;background:#0E1A14;height:clamp(150px,27vh,230px);position:relative;overflow:hidden;display:grid;place-items:center;color:#fff;text-align:center}
+.view .corner{position:absolute;width:26px;height:26px;border:3px solid var(--sun)}
+.view .corner:nth-child(1){left:18px;top:18px;border-right:0;border-bottom:0}.view .corner:nth-child(2){right:18px;top:18px;border-left:0;border-bottom:0}
+.view .corner:nth-child(3){left:18px;bottom:18px;border-right:0;border-top:0}.view .corner:nth-child(4){right:18px;bottom:18px;border-left:0;border-top:0}
+.scan{position:absolute;left:18px;right:18px;height:3px;background:var(--sun);box-shadow:0 0 14px var(--sun);animation:scan 1.1s ease-in-out infinite alternate}
+@keyframes scan{from{top:10%}to{top:86%}}
+.shutter{width:62px;height:62px;border-radius:50%;border:4px solid var(--sun);background:#fff;margin:16px auto 0;display:block;transition:.15s}
+.shutter:active{transform:scale(.88)}
+.flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none}
+.flash.go{animation:fl .5s}
+@keyframes fl{0%{opacity:.9}100%{opacity:0}}
+.chk{display:flex;gap:12px;align-items:flex-start;padding:12px;border:1.5px solid var(--line);border-radius:14px;margin-bottom:10px;text-align:left;width:100%;transition:.2s}
+.chk.on{border-color:var(--g);background:var(--g2)}
+.chk .bx{flex:none;width:22px;height:22px;border-radius:7px;border:2px solid var(--mute);display:grid;place-items:center;transition:.2s}
+.chk.on .bx{background:var(--g);border-color:var(--g)}
+.chk .bx svg{width:14px;stroke:var(--onG);fill:none;stroke-width:3;stroke-dasharray:20;stroke-dashoffset:20;transition:.3s .1s}
+.chk.on .bx svg{stroke-dashoffset:0}
+.ok{display:grid;place-items:center;text-align:center;padding:30px 10px}
+.ok .ring{width:92px;height:92px;border-radius:50%;background:var(--g);display:grid;place-items:center;animation:boom .6s cubic-bezier(.2,1.4,.4,1)}
+.ok svg{width:46px;stroke:var(--onG);fill:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:40;stroke-dashoffset:40;animation:draw .5s .35s forwards}
+@keyframes boom{from{transform:scale(0)}}@keyframes draw{to{stroke-dashoffset:0}}
+.tl{text-align:left;margin-top:20px;width:100%}
+.tl div{display:flex;gap:12px;padding-bottom:16px;position:relative;opacity:.45}
+.tl div::before{content:"";width:14px;height:14px;border-radius:50%;background:var(--line);flex:none;margin-top:3px;z-index:1}
+.tl div::after{content:"";position:absolute;left:6px;top:18px;bottom:0;width:2px;background:var(--line)}
+.tl div:last-child::after{display:none}
+.tl div.done{opacity:1}.tl div.done::before{background:var(--g)}
+.tl div.now{opacity:1}.tl div.now::before{background:var(--sun);animation:pulse 1.4s infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 7px #f5b70033}}
+/* chat */
+.msgs{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:12px 16px;display:flex;flex-direction:column;gap:8px;background:var(--bg);scrollbar-width:thin}.msgs>:first-child{margin-top:auto}.m{flex:none;overflow-wrap:anywhere}
+.m{max-width:80%;padding:9px 13px;border-radius:18px;animation:in .3s both;font-size:14.5px}
+.m.me{align-self:flex-end;background:var(--g);color:var(--onG);border-bottom-right-radius:5px}
+.m.ad{align-self:flex-start;background:var(--surf);border-bottom-left-radius:5px}
+.typing{display:flex;gap:4px;padding:12px 14px}.typing i{width:7px;height:7px;border-radius:50%;background:var(--mute);animation:bl 1s infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes bl{50%{transform:translateY(-5px);opacity:.4}}
+.send{display:flex;gap:8px;padding:10px 14px calc(env(safe-area-inset-bottom,0px) + 10px);border-top:1px solid var(--line)}
+.send input{flex:1;border:0;background:var(--bg);border-radius:99px;padding:0 16px;height:44px;font:inherit;color:inherit}
+.send button{width:44px;height:44px;border-radius:50%;background:var(--g);color:var(--onG);font-size:18px}
+.ava{flex:none;width:46px;height:46px;border-radius:50%;background:var(--g);color:var(--onG);display:grid;place-items:center;font-weight:800}
+/* toggle */
+.sw{flex:none;width:48px;height:28px;border-radius:99px;background:var(--line);position:relative;transition:.25s}
+.sw::after{content:"";position:absolute;left:3px;top:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:.25s cubic-bezier(.3,1.5,.5,1);box-shadow:0 1px 3px #0004}
+.sw.on{background:var(--g)}.sw.on::after{transform:translateX(20px)}
+.toast{position:absolute;left:20px;right:20px;top:calc(env(safe-area-inset-top,0px) + 14px);background:var(--ink);color:var(--surf);padding:12px 16px;border-radius:14px;z-index:60;transform:translateY(-140%);transition:.4s cubic-bezier(.2,1.2,.3,1);font-weight:500}
+.toast.on{transform:none}
+/* splash */
+.splash{position:absolute;inset:0;background:var(--g);color:var(--onG);z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;transition:opacity .6s,transform .6s}
+.splash.off{opacity:0;transform:scale(1.08);pointer-events:none}
+.splash .doc{width:190px;height:136px;padding:12px;--c:#0E6B47;background:#fff}
+.splash .doc .h{height:10px}.splash .doc .l{top:34px;gap:10px;left:42%}.splash .doc .l u{height:10px;animation:rd 1.6s .4s both}
+.splash .doc .l u:nth-child(2){animation-delay:.7s}.splash .doc .l u:nth-child(3){animation-delay:1s}
+@keyframes rd{from{transform:scaleX(0);transform-origin:left}}
+.splash .doc{animation:drop .9s cubic-bezier(.2,1.2,.4,1) both}
+@keyframes drop{from{transform:translateY(-120px) rotate(-18deg);opacity:0}}
+.lens{position:absolute;width:74px;height:74px;border-radius:50%;border:6px solid var(--sun);background:#f5b70022;animation:lens 2s .5s ease-in-out both;top:50%;left:50%;margin:-130px 0 0 -90px}
+@keyframes lens{0%{transform:translate(-60px,20px);opacity:0}30%{opacity:1}60%{transform:translate(110px,30px)}100%{transform:translate(60px,60px);opacity:1}}
+.splash h1{font-size:40px;animation:in .7s 1.2s both}
+.splash p{opacity:.85;margin-top:-18px;animation:in .7s 1.5s both;text-align:center;padding:0 30px}
+.phone{--tb:calc(env(safe-area-inset-top,0px) + 54px)}
+.appbar{position:absolute;top:0;left:0;right:0;height:var(--tb);padding:env(safe-area-inset-top,0px) 16px 0;display:flex;align-items:center;justify-content:space-between;background:var(--surf);border-bottom:1px solid var(--line);z-index:6}
+.brand{display:flex;align-items:center;gap:9px;font-size:20px;font-weight:800;font-family:'Bricolage Grotesque',sans-serif;letter-spacing:-.02em}.brand svg{width:30px;height:30px}
+.ab-r{display:flex;gap:8px;align-items:center}
+.ib{width:38px;height:38px;border-radius:50%;background:var(--bg);display:grid;place-items:center;position:relative}.ib svg{width:20px;fill:none;stroke:var(--ink);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ib .dot{position:absolute;top:8px;right:9px;width:9px;height:9px;border-radius:50%;background:var(--red);border:2px solid var(--bg);animation:pulse 1.6s infinite}
+.av{width:38px;height:38px;border-radius:50%;background:var(--g);color:var(--onG);font-weight:800;font-size:14px}
+#list,#threads,#alist{flex:1 1 0;min-height:0;overflow-y:auto;overflow-x:hidden;align-content:start;padding-bottom:14px;scrollbar-width:thin;scrollbar-color:var(--line) transparent;overscroll-behavior:contain}
+.pg{height:38px;display:flex;align-items:center;justify-content:center;gap:10px}.pg button{width:30px;height:30px;border-radius:50%;background:var(--bg);font-size:18px;line-height:1}
+.pg span,.dots span{width:7px;height:7px;border-radius:50%;background:var(--line);transition:.3s}.pg span.on,.dots span.on{width:20px;border-radius:4px;background:var(--g)}
+@media (max-height:700px){.hide-s{display:none!important}}
+.auth{position:absolute;inset:0;z-index:40;background:var(--surf);display:flex;flex-direction:column;overflow-y:auto;scrollbar-width:none;transition:transform .55s cubic-bezier(.7,0,.2,1)}
+.auth::-webkit-scrollbar{display:none}.auth.off{transform:translateY(-104%);pointer-events:none}
+.ahead{background:var(--g);color:var(--onG);padding:calc(env(safe-area-inset-top,0px) + 22px) 24px 24px;border-radius:0 0 30px 30px;flex:none;transition:.4s}
+.ahead svg{width:44px;height:44px;margin-bottom:10px}.ahead h1{font-size:clamp(24px,4vh,30px)}.ahead p{opacity:.85;margin-top:4px}
+.auth.up .ahead{padding-top:calc(env(safe-area-inset-top,0px) + 14px);padding-bottom:16px}.auth.up .ahead p,.auth.up .ahead svg{display:none}
+.seg{display:flex;position:relative;background:var(--bg);border-radius:14px;margin:14px 20px 0;padding:4px;flex:none}
+.seg i{position:absolute;top:4px;bottom:4px;left:4px;width:calc(50% - 4px);background:var(--surf);border-radius:11px;box-shadow:0 1px 4px #0003;transition:transform .35s cubic-bezier(.3,1.3,.5,1)}.seg.up i{transform:translateX(100%)}
+.seg button{flex:1;position:relative;padding:9px;font-weight:600;color:var(--mute)}.seg button.on{color:var(--ink)}
+.aform{padding:4px 20px calc(env(safe-area-inset-bottom,0px) + 14px);display:flex;flex-direction:column;flex:1}
+.aform .in{padding:10px 12px;flex:none;height:44px}.aform .lb{margin:8px 0 4px;font-size:13px}
+.pw{position:relative}.pw button{position:absolute;right:4px;top:3px;padding:8px;color:var(--g);font-weight:600;font-size:13px}
+.err{color:var(--red);font-size:13px;min-height:20px;margin-top:2px}.err.sh{animation:shake .35s}@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.hint{text-align:center;color:var(--mute);font-size:13px;margin-top:auto;padding-top:10px}
+.intro{position:absolute;inset:0;z-index:45;background:var(--surf);display:flex;flex-direction:column;transition:transform .5s cubic-bezier(.7,0,.2,1)}.intro.off{transform:translateX(-104%);pointer-events:none}
+.skip{align-self:flex-end;padding:calc(env(safe-area-inset-top,0px) + 16px) 22px 6px;font-weight:600;color:var(--mute)}
+.isl{flex:1;overflow:hidden;min-height:0}.itrack{display:flex;height:100%;transition:transform .5s cubic-bezier(.3,1,.4,1)}
+.itrack .s{flex:none;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 32px;gap:12px}
+.orb{width:clamp(110px,22vh,170px);aspect-ratio:1;border-radius:50%;background:var(--g2);display:grid;place-items:center;font-size:clamp(48px,10vh,76px);position:relative;animation:float 3s ease-in-out infinite;margin-bottom:14px}
+.orb::after{content:"";position:absolute;inset:-12px;border-radius:50%;border:3px dashed var(--sun);animation:spin 14s linear infinite}
+@keyframes float{50%{transform:translateY(-10px)}}@keyframes spin{to{transform:rotate(360deg)}}
+.ifoot{padding:10px 24px calc(env(safe-area-inset-bottom,0px) + 22px);display:grid;gap:16px}.dots{display:flex;gap:7px;justify-content:center}
+.body.sbody{overflow-y:auto;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 22px);scrollbar-width:thin;overscroll-behavior:contain}
+.shead{display:flex;gap:14px;align-items:center;padding:6px 0}.shead .ava{width:58px;height:58px;font-size:20px}.shead h2{font-size:20px}
+.sec{margin:18px 0 6px;font:800 15px 'Bricolage Grotesque',sans-serif}
+.grp{background:var(--bg);border-radius:16px;padding:2px 14px}
+.rw{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}.grp .rw:last-child{border-bottom:0}
+button.rw{width:100%;text-align:left;font-weight:600}
+.sw5{display:flex;gap:10px}.sw5 button{width:34px;height:34px;border-radius:50%;border:3px solid var(--surf);box-shadow:0 0 0 1.5px var(--line);transition:.2s}.sw5 button:active{transform:scale(.88)}
+.btn.out{background:transparent;border:1.5px solid var(--red);color:var(--red)}.btn.dng{background:var(--red);color:#fff}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important}}
+</style></head>
+<body>
+<div class="phone" id="ph">
+ <div class="splash" id="splash" onclick="hideSplash()">
+  <div style="position:relative"><div class="doc" id="sd"><div class="h"></div><div class="p"></div><div class="l"><u></u><u></u><u></u></div><span class="st">ID</span></div><div class="lens" style="margin:-20px 0 0 -40px;top:0;left:0"></div></div>
+  <h1 class="disp">Doc-Find</h1><p>Found a lost document? Lost one? Get it back safely.</p>
+ </div>
+ <div class="toast" id="toast"></div>
+ <header class="appbar"><div class="brand"><svg viewBox="0 0 32 32"><rect width="32" height="32" rx="9" fill="var(--g)"/><rect x="8" y="7" width="13" height="17" rx="2" fill="none" stroke="var(--onG)" stroke-width="2"/><circle cx="21" cy="21" r="5" fill="var(--sun)" stroke="var(--g)" stroke-width="2"/></svg>Doc-Find</div><div class="ab-r"><button class="ib" onclick="go('msg')" aria-label="Messages"><svg viewBox="0 0 24 24"><path d="M6 17V11a6 6 0 0112 0v6l2 2H4zM10 21h4"/></svg><i class="dot" id="bdot"></i></button><button class="av" id="av" onclick="openProfile()" aria-label="Profile">?</button></div></header>
+ <div class="auth" id="auth"><div class="ahead"><svg viewBox="0 0 32 32"><rect width="32" height="32" rx="9" fill="var(--onG)"/><rect x="8" y="7" width="13" height="17" rx="2" fill="none" stroke="var(--g)" stroke-width="2"/><circle cx="21" cy="21" r="5" fill="var(--sun)" stroke="var(--onG)" stroke-width="2"/></svg><h1 id="atitle"></h1><p id="asub">Log in to find or return a document.</p></div><div class="seg" id="seg"><i></i><button class="on" onclick="authMode('in')">Log in</button><button onclick="authMode('up')">Create account</button></div><form class="aform" id="aform" onsubmit="authSubmit(event)" novalidate></form></div>
+ <div class="intro" id="intro"><button class="skip" onclick="endIntro()">Skip</button><div class="isl" id="isl"><div class="itrack" id="itrack"></div></div><div class="ifoot"><div class="dots" id="idots"></div><button class="btn" id="inx" onclick="introNext()">Next</button></div></div>
+
+ <section class="tab on" id="t-search">
+  <div class="top"><h1>Find a lost document</h1></div>
+  <label class="field"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input id="q" placeholder="Town or name, e.g. Bafoussam" aria-label="Search"></label>
+  <div class="chips" id="chips"></div>
+  <div class="row2"><select id="loc" aria-label="Town"></select><select id="dt" aria-label="Date"><option value="999">Any date</option><option value="7">Last 7 days</option><option value="30">Last 30 days</option></select></div>
+  <div class="meta"><span id="cnt"></span><button class="link" onclick="saveSearch()">Alert me for this search</button></div>
+  <div class="list" id="list"></div>
+ </section>
+
+ <section class="tab" id="t-report">
+  <div class="top"><h1>I found a<br>document</h1><p class="sub">Report it in three steps. Our team checks it before anything goes public.</p></div>
+  <div class="list" style="margin-top:12px">
+   <div class="note" style="margin:0"><span>🔒</span><span>The full document is never shown to the public. We blur the photo and hide the ID number.</span></div>
+   <button class="btn" onclick="openReport()" style="margin-top:6px">Start report</button>
+  </div>
+  <div class="top" style="padding-top:12px"><h2 style="font-size:17px">Your recent reports</h2></div>
+  <div class="list" id="mine"><div class="empty" style="padding:20px">No reports yet. Thank you for being honest enough to be here.</div></div>
+ </section>
+
+ <section class="tab" id="t-msg">
+  <div class="top"><h1>Messages</h1><p class="sub">You talk to the Doc-Find team. Never directly to the finder.</p></div>
+  <div class="list" id="threads" style="margin-top:14px"></div>
+ </section>
+
+ <section class="tab" id="t-alerts">
+  <div class="top"><h1>Alerts</h1><p class="sub">We notify you when a matching document is posted.</p></div>
+  <div class="list" id="alist" style="margin-top:14px"></div>
+ </section>
+
+ <nav class="nav" id="nav"></nav>
+
+ <div class="page" id="detail"><div class="bar"><button class="b" onclick="closeP('detail')" aria-label="Back">←</button><h2>Document details</h2></div><div class="body" id="dbody"></div><div class="foot"><button class="btn" onclick="openClaim()">This is my document</button></div></div>
+
+ <div class="page" id="report"><div class="bar"><button class="b" onclick="rBack()" aria-label="Back">←</button><h2 id="rt">Photograph it</h2></div><div class="steps" id="steps"><i></i><i></i><i></i></div><div class="body" id="rbody"></div><div class="foot" id="rfoot"></div></div>
+
+ <div class="page" id="chat"><div class="bar"><button class="b" onclick="closeP('chat');renderThreads()" aria-label="Back">←</button><div class="ava" style="width:38px;height:38px">DF</div><div style="min-width:0;flex:1"><h2 id="ct" style="font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></h2><div class="sub" style="margin:0;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Doc-Find team · replies in minutes</div></div></div><div class="msgs" id="msgs"></div><form class="send" onsubmit="sendMsg(event)"><input id="mi" placeholder="Write a message" autocomplete="off"><button aria-label="Send">➤</button></form></div>
+
+ <div class="page" id="settings"><div class="bar"><button class="b" onclick="closeP('settings')" aria-label="Back">←</button><h2>Profile and settings</h2></div><div class="body sbody" id="sbody"></div></div>
+ <div class="scrim" id="scrim" onclick="closeSheet()"></div>
+ <div class="sheet" id="sheet"></div>
+</div>
+
+<script>
+const $=s=>document.querySelector(s);
+const T={id:['ID card','ID'],pass:['Passport','PP'],birth:['Birth certificate','BC'],lic:['Driver’s licence','DL'],other:['Other','…']};
+const D=[
+ {id:1,type:'id',name:'K•••• N••••••',town:'Douala',spot:'Akwa, near Rond-point Deido',ago:0,note:'Found on a taxi seat. Held by finder.'},
+ {id:2,type:'pass',name:'M••••• T••••',town:'Yaoundé',spot:'Mvan bus park',ago:2,note:'Passport cover is dark blue. Issued 2022.'},
+ {id:3,type:'birth',name:'E••• A•••••',town:'Bafoussam',spot:'Marché A',ago:5,note:'Folded in a plastic sleeve.'},
+ {id:4,type:'lic',name:'F••••• B•••',town:'Douala',spot:'Bonabéri ferry quay',ago:9,note:'Category B licence.'},
+ {id:5,type:'id',name:'S•••• M••••••',town:'Buea',spot:'University of Buea gate',ago:12,note:'Card is slightly bent.'},
+ {id:6,type:'id',name:'A••• N•••',town:'Garoua',spot:'Grand Marché',ago:3,note:'Found near the pharmacy stalls.'},
+ {id:7,type:'birth',name:'J••• T••••••',town:'Bamenda',spot:'Commercial Avenue',ago:20,note:'Photocopy certified, original attached.'},
+ {id:8,type:'other',name:'Student card · P•••• L••',town:'Yaoundé',spot:'Ngoa-Ekélé',ago:1,note:'University student card.'}];
+const S={tab:'search',type:'all',loc:'all',dt:999,q:'',cur:null,threads:[],mine:[],alerts:[{l:'ID card · Douala',on:true},{l:'Passport · Any town',on:false}],unread:1};
+S.threads.push({id:0,title:'Doc-Find team',sub:'Welcome to Doc-Find',msgs:[{f:'a',t:'Welcome to Doc-Find. Ask us anything about finding or returning a document.'}]});
+const IC={search:'<circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/>',report:'<path d="M12 5v14M5 12h14"/>',msg:'<path d="M4 5h16v11H9l-5 4z"/>',alerts:'<path d="M6 17V11a6 6 0 0112 0v6l2 2H4zM10 21h4"/>'};
+const NAV=[['search','Search'],['report','Report'],['msg','Messages'],['alerts','Alerts']];
+function renderNav(){const bd=$('#bdot');if(bd)bd.style.display=S.unread?'block':'none';$('#nav').innerHTML=NAV.map(([k,l])=>`<button class="${S.tab===k?'on':''}" onclick="go('${k}')"><svg viewBox="0 0 24 24">${IC[k]}</svg>${l}${k==='msg'&&S.unread?`<span class="badge">${S.unread}</span>`:''}</button>`).join('')}
+function go(k){S.tab=k;document.querySelectorAll('.tab').forEach(e=>e.classList.toggle('on',e.id==='t-'+k));if(k==='msg')renderThreads();if(k==='alerts')renderAlerts();renderNav()}
+function art(l,big){const[t,c]=T[l.type];return `<div class="doc ${l.type} ${big?'big':''}"><div class="h"></div><div class="p"></div><div class="l"><u style="width:90%"></u><u style="width:70%"></u><u style="width:80%"></u></div><span class="st">${c}</span></div>`}
+function when(d){return d===0?'Today':d===1?'Yesterday':d+' days ago'}
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove('on'),2600)}
+/* search */
+function initSearch(){
+ $('#chips').innerHTML=[['all','All'],...Object.entries(T).map(([k,v])=>[k,v[0]])].map(([k,l])=>`<button class="chip ${S.type===k?'on':''}" onclick="S.type='${k}';initSearch()">${l}</button>`).join('');
+ const towns=[...new Set(D.map(d=>d.town))].sort();
+ $('#loc').innerHTML='<option value="all">All towns</option>'+towns.map(t=>`<option ${S.loc===t?'selected':''}>${t}</option>`).join('');
+ $('#dt').value=S.dt;renderList()}
+function renderList(keep){
+ const q=S.q.toLowerCase();
+ const r=D.filter(d=>(S.type==='all'||d.type===S.type)&&(S.loc==='all'||d.town===S.loc)&&d.ago<=S.dt&&(!q||(d.town+d.name+T[d.type][0]+d.spot).toLowerCase().includes(q))).sort((a,b)=>a.ago-b.ago);
+ $('#cnt').textContent=r.length+(r.length===1?' document found':' documents found');
+ if(!keep)$('#list').scrollTop=0;$('#list').innerHTML=r.length?r.map((d,i)=>`<button class="card" style="animation-delay:${i*50}ms" onclick="openDetail(${d.id})">${art(d)}<div><span class="tag">${T[d.type][0]}</span><div class="t">${d.name}</div><div class="s">${d.town} · ${when(d.ago)}</div></div></button>`).join(''):'<div class="empty"><div style="font-size:34px">🔍</div><b>No match yet</b><br>Try another town or date, or tap “Alert me for this search”. We’ll tell you when one appears.</div>'}
+$('#q').oninput=e=>{S.q=e.target.value;renderList()};
+$('#loc').onchange=e=>{S.loc=e.target.value;renderList()};
+$('#dt').onchange=e=>{S.dt=+e.target.value;renderList()};
+function fit(sel,a,h){const n=Math.max(1,Math.floor(($(sel).clientHeight+12)/(h+12)));return a.slice(0,n)}
+function drawPg(){$('#pg').innerHTML=S.pages>1?'<button onclick="pg(-1)" aria-label="Previous page">‹</button>'+Array.from({length:S.pages},(_,i)=>`<span class="${i===S.pg?'on':''}"></span>`).join('')+'<button onclick="pg(1)" aria-label="Next page">›</button>':''}
+function pg(n){S.pg=Math.max(0,Math.min(S.pages-1,S.pg+n));renderList(true)}
+function saveSearch(){const l=(S.type==='all'?'Any document':T[S.type][0])+' · '+(S.loc==='all'?'Any town':S.loc);if(!S.alerts.some(a=>a.l===l))S.alerts.unshift({l,on:true});toast('Alert saved: '+l);renderAlerts()}
+/* pages */
+function openP(id){$('#'+id).classList.add('open')}function closeP(id){$('#'+id).classList.remove('open')}
+function openDetail(id){const d=D.find(x=>x.id===id);S.cur=d;
+ $('#dbody').innerHTML=`${art(d,1)}<h1 style="margin-top:16px;font-size:24px">${T[d.type][0]}</h1><p class="sub">${d.name}</p>
+ <div class="kv"><span>Found in</span><b>${d.town}</b><span>Place</span><b>${d.spot}</b><span>Date</span><b>${when(d.ago)}</b><span>Note</span><b style="font-weight:500">${d.note}</b><span>Status</span><b style="color:var(--g)">Held safely by our team</b></div>
+ <div class="note hide-s"><span>🛡️</span><span>Details are hidden on purpose. To claim it, you’ll answer a question only the owner can answer. We then arrange the handoff for you.</span></div>`;openP('detail')}
+/* claim sheet */
+function openSheet(h){$('#sheet').innerHTML='<div class="grab"></div>'+h;$('#scrim').classList.add('on');$('#sheet').classList.add('on')}
+function closeSheet(){$('#scrim').classList.remove('on');$('#sheet').classList.remove('on')}
+function openClaim(){const d=S.cur;S.pf=false;
+ openSheet(`<h2 style="font-size:22px">Prove it’s yours</h2><p class="sub">This protects the real owner from false claims.</p>
+ <label class="lb" for="ans">${d.type==='id'?'Which town issued your card?':d.type==='pass'?'What is your date of birth?':d.type==='birth'?'What is your mother’s first name?':'Which date is printed as the issue date?'}</label><input class="in" id="ans" placeholder="Your answer" oninput="vc()">
+ <label class="lb">Photo of your own ID <span style="font-weight:400;color:var(--mute)">(optional, speeds things up)</span></label>
+ <button class="btn alt" id="pf" onclick="S.pf=true;this.textContent='✓ ID photo added'">Add photo</button>
+ <button class="btn" id="cs" style="margin-top:18px" disabled onclick="submitClaim()">Send claim to Doc-Find team</button>`)}
+function vc(){$('#cs').disabled=$('#ans').value.trim().length<2}
+function submitClaim(){const d=S.cur;closeSheet();closeP('detail');
+ let th=S.threads.find(t=>t.id===d.id);
+ if(!th){th={id:d.id,title:T[d.type][0]+' · '+d.town,sub:'Claim under review',msgs:[{f:'m',t:'I think this is my '+T[d.type][0].toLowerCase()+'.'},{f:'a',t:'Thanks. We received your answer and will check it against the document. This usually takes a few minutes.'}]};S.threads.unshift(th);S.unread++}
+ renderNav();toast('Claim sent. Chat with the team now.');setTimeout(()=>{go('msg');openChat(d.id)},700)}
+/* messages */
+function renderThreads(){$('#threads').innerHTML=S.threads.map((t,i)=>`<button class="card" style="animation-delay:${i*50}ms;align-items:center" onclick="openChat(${t.id})"><div class="ava">DF</div><div style="flex:1;min-width:0"><div class="t">${t.title}</div><div class="s" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${t.msgs[t.msgs.length-1].t}</div></div></button>`).join('')}
+function openChat(id){S.ct=S.threads.find(t=>t.id===id);S.unread=0;renderNav();$('#ct').textContent=S.ct.title;drawMsgs();openP('chat')}
+function drawMsgs(){const m=$('#msgs');m.innerHTML=S.ct.msgs.map(x=>`<div class="m ${x.f==='m'?'me':'ad'}">${x.t}</div>`).join('');m.scrollTop=m.scrollHeight}
+function sendMsg(e){e.preventDefault();const i=$('#mi'),v=i.value.trim();if(!v)return;i.value='';S.ct.msgs.push({f:'m',t:v});drawMsgs();
+ const m=$('#msgs');m.insertAdjacentHTML('beforeend','<div class="m ad typing" id="ty"><i></i><i></i><i></i></div>');m.scrollTop=m.scrollHeight;
+ setTimeout(()=>{$('#ty')?.remove();S.ct.msgs.push({f:'a',t:S.ct.id?'Noted. Your answer matches. Please bring your original ID to our Doc-Find point in '+(D.find(d=>d.id===S.ct.id)?.town||'your town')+' and we will hand it over.':'Happy to help. A team member will reply shortly.'});drawMsgs()},1400)}
+/* alerts */
+function renderAlerts(){$('#alist').innerHTML=S.alerts.map((a,i)=>`<div class="card" style="align-items:center;animation-delay:${i*50}ms"><div style="flex:1"><div class="t">${a.l}</div><div class="s">${a.on?'Push + SMS when posted':'Paused'}</div></div><button class="sw ${a.on?'on':''}" role="switch" aria-checked="${a.on}" aria-label="Toggle alert" onclick="S.alerts[${i}].on=!S.alerts[${i}].on;renderAlerts()"></button></div>`).join('')}
+/* report flow */
+const R={s:0,photo:false,type:'id',town:'Douala',spot:'',note:'',c1:false,c2:false};
+function openReport(){Object.assign(R,{s:0,photo:false,type:'id',spot:'',note:'',c1:false,c2:false});drawR();openP('report')}
+function rBack(){if(R.s>0&&R.s<3){R.s--;drawR()}else closeP('report')}
+function drawR(){const b=$('#rbody'),f=$('#rfoot');
+ document.querySelectorAll('#steps i').forEach((e,i)=>e.classList.toggle('on',i<=R.s&&R.s<3||R.s===3));
+ $('#steps').style.display=R.s===3?'none':'flex';
+ if(R.s===0){$('#rt').textContent='Photograph it';
+  b.innerHTML=`<div class="view" id="vf">${R.photo?`<div style="width:78%">${art({type:'id'},1)}</div>`:'<div class="corner"></div><div class="corner"></div><div class="corner"></div><div class="corner"></div><div class="scan"></div><div style="opacity:.8;padding:0 40px">Place the document flat and fit it inside the frame</div>'}<div class="flash" id="fl"></div></div>
+  ${R.photo?'<div class="note"><span>✨</span><span>Preview of the public listing. The photo is blurred and the ID number and name are hidden.</span></div>':'<button class="shutter" onclick="snap()" aria-label="Take photo"></button>'}`;
+  f.innerHTML=`<button class="btn" ${R.photo?'':'disabled'} onclick="R.s=1;drawR()">Continue</button>`}
+ if(R.s===1){$('#rt').textContent='Where and what';
+  b.innerHTML=`<label class="lb">Document type</label><div class="chips" style="padding:0;flex-wrap:wrap">${Object.entries(T).map(([k,v])=>`<button class="chip ${R.type===k?'on':''}" onclick="R.type='${k}';drawR()">${v[0]}</button>`).join('')}</div>
+  <label class="lb" for="rtn">Town where you found it</label><select id="rtn" onchange="R.town=this.value">${['Douala','Yaoundé','Bafoussam','Bamenda','Garoua','Buea','Other'].map(t=>`<option ${R.town===t?'selected':''}>${t}</option>`).join('')}</select>
+  <label class="lb" for="rsp">Exact place</label><input class="in" id="rsp" value="${R.spot}" placeholder="e.g. Marché Mokolo, near the bank" oninput="R.spot=this.value;$('#rfoot button').disabled=R.spot.length<3">
+  <label class="lb" for="rnt">Note <span style="font-weight:400;color:var(--mute)">(optional)</span></label><input class="in" id="rnt" value="${R.note}" placeholder="Anything that helps" oninput="R.note=this.value">`;
+  f.innerHTML=`<button class="btn" ${R.spot.length<3?'disabled':''} onclick="R.s=2;drawR()">Continue</button>`}
+ if(R.s===2){$('#rt').textContent='Your consent';
+  b.innerHTML=`<p class="sub" style="margin:4px 0 14px">Nothing is selected for you. Tick each box to agree.</p>
+  <button class="chk ${R.c1?'on':''}" onclick="R.c1=!R.c1;drawR()"><span class="bx"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></span><span><b>Photo and location</b><br><span class="s sub">Doc-Find may store this photo and where I found it, to help the owner.</span></span></button>
+  <button class="chk ${R.c2?'on':''}" onclick="R.c2=!R.c2;drawR()"><span class="bx"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></span><span><b>Phone number for handoff</b><br><span class="s sub">The team may call me to arrange handing the document over. Owners never see my number.</span></span></button>
+  <div class="note hide-s"><span>🇨🇲</span><span>Your data is handled under Cameroon’s Law No. 2024/017 on personal data protection. You can withdraw consent anytime.</span></div>`;
+  f.innerHTML=`<button class="btn" ${R.c1&&R.c2?'':'disabled'} onclick="submitR()">Submit for review</button>`}
+ if(R.s===3){$('#rt').textContent='Report sent';
+  b.innerHTML=`<div class="ok"><div class="ring"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></div><h1 style="margin-top:20px;font-size:26px">Thank you</h1><p class="sub">Someone is going to be very relieved.</p>
+  <div class="tl"><div class="done"><span><b>Report received</b><br><span class="sub">Just now</span></span></div><div class="now"><span><b>Team review</b><br><span class="sub">Usually within a few hours</span></span></div><div><span><b>Posted with redaction</b></span></div><div><span><b>Handoff with the owner</b></span></div></div></div>`;
+  f.innerHTML=`<button class="btn" onclick="closeP('report')">Done</button>`}}
+function snap(){$('#fl').classList.add('go');setTimeout(()=>{R.photo=true;drawR()},260)}
+function submitR(){S.mine.unshift({type:R.type,town:R.town,spot:R.spot});R.s=3;drawR();
+ $('#mine').innerHTML=S.mine.slice(0,2).map(m=>`<div class="card"><div style="flex:1"><span class="tag">${T[m.type][0]}</span><div class="t">${m.town}</div><div class="s">${m.spot}</div></div><span class="tag" style="background:#f5b70033;color:#8a6500;align-self:center">In review</span></div>`).join('')}
+/* splash */
+function hideSplash(){$('#splash').classList.add('off')}
+setTimeout(hideSplash,3300);
+/* intro + auth */
+const IS=[['🪪','Lost an ID or passport?','Search documents found across Cameroon by town, date and type.'],['📸','Found one? Report it fast.','Snap a photo. We blur and redact it before anything goes public.'],['🤝','A safe handoff, every time.','Owners prove ownership first. Our team arranges the return.']];
+S.is=0;S.users=[{name:'Demo User',email:'demo@docfind.cm',phone:'670000000',pw:'demo1234'}];S.user=null;S.ac=false;
+$('#itrack').innerHTML=IS.map(s=>`<div class="s"><div class="orb">${s[0]}</div><h1>${s[1]}</h1><p class="sub">${s[2]}</p></div>`).join('');
+function drawIntro(){$('#itrack').style.transform=`translateX(${-S.is*100}%)`;$('#idots').innerHTML=IS.map((_,i)=>`<span class="${i===S.is?'on':''}"></span>`).join('');$('#inx').textContent=S.is===2?'Get started':'Next'}
+function introNext(d=1){S.is+=d;if(S.is>2)return endIntro();S.is=Math.max(0,S.is);drawIntro()}
+function endIntro(){$('#intro').classList.add('off')}
+const CK='<span class="bx"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></span>';
+function authMode(m){S.am=m;S.ac=false;$('#auth').classList.toggle('up',m==='up');$('#seg').classList.toggle('up',m==='up');document.querySelectorAll('#seg button').forEach((b,i)=>b.classList.toggle('on',(i===1)===(m==='up')));
+ $('#atitle').textContent=m==='in'?'Welcome back':'Create your account';
+ $('#aform').innerHTML=m==='in'?`<label class="lb" for="f1">Email or phone</label><input class="in" id="f1" autocomplete="username" placeholder="you@email.com or 6XXXXXXXX"><label class="lb" for="f2">Password</label><div class="pw"><input class="in" id="f2" type="password" autocomplete="current-password" placeholder="Your password"><button type="button" onclick="tp('f2',this)">Show</button></div><div class="err" id="err"></div><button class="btn">Log in</button><div class="hint">Demo: demo@docfind.cm · demo1234 <button type="button" class="link" onclick="demo()">Fill in</button></div>`:
+ `<label class="lb" for="f1">Full name</label><input class="in" id="f1" autocomplete="name" placeholder="Your full name"><label class="lb" for="f2">Phone number (+237)</label><input class="in" id="f2" inputmode="tel" autocomplete="tel" placeholder="6XX XXX XXX"><label class="lb" for="f3">Email</label><input class="in" id="f3" type="email" autocomplete="email" placeholder="you@email.com"><label class="lb" for="f4">Password</label><div class="pw"><input class="in" id="f4" type="password" autocomplete="new-password" placeholder="At least 6 characters"><button type="button" onclick="tp('f4',this)">Show</button></div><button type="button" class="chk" style="margin:10px 0 0;padding:9px" onclick="S.ac=!S.ac;this.classList.toggle('on',S.ac)">${CK}<span class="s sub" style="font-size:12px">I agree that Doc-Find stores my name, phone and email to run my account (Law No. 2024/017). I can withdraw anytime.</span></button><div class="err" id="err"></div><button class="btn">Create account</button>`}
+function tp(id,b){const i=$('#'+id);const s=i.type==='password';i.type=s?'text':'password';b.textContent=s?'Hide':'Show'}
+function demo(){$('#f1').value='demo@docfind.cm';$('#f2').value='demo1234'}
+function bad(m){const e=$('#err');e.textContent=m;e.classList.remove('sh');void e.offsetWidth;e.classList.add('sh')}
+function authSubmit(e){e.preventDefault();const v=id=>($('#'+id)?.value||'').trim();
+ if(S.am==='in'){const k=v('f1').toLowerCase().replace(/\s/g,''),u=S.users.find(u=>(u.email===k||u.phone===k)&&u.pw===v('f2'));return u?login(u):bad('Wrong email, phone or password. New here? Create an account.')}
+ const ph=v('f2').replace(/[\s+]|^237/g,'');
+ if(v('f1').length<2)return bad('Enter your full name.');if(!/^6\d{8}$/.test(ph))return bad('Enter a valid 9-digit number starting with 6.');
+ if(!/^\S+@\S+\.\S+$/.test(v('f3')))return bad('Enter a valid email address.');if(v('f4').length<6)return bad('Password needs at least 6 characters.');
+ if(S.users.some(u=>u.email===v('f3').toLowerCase()||u.phone===ph))return bad('An account with this email or number already exists. Log in instead.');
+ if(!S.ac)return bad('Tick the consent box to continue.');
+ const u={name:v('f1'),email:v('f3').toLowerCase(),phone:ph,pw:v('f4')};S.users.push(u);login(u)}
+function login(u){S.user=u;setTimeout(applyCol,0);$('#av').textContent=u.name.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();$('#auth').classList.add('off');go('search');setTimeout(()=>toast('Welcome, '+u.name.split(' ')[0]),500)}
+function openProfileOld(){const u=S.user;openSheet(`<div style="display:flex;gap:14px;align-items:center"><div class="ava" style="width:56px;height:56px;font-size:20px">${$('#av').textContent}</div><div><h2 style="font-size:20px">${u.name}</h2><div class="sub" style="margin:0">${u.email}<br>+237 ${u.phone}</div></div></div><div class="note"><span>📄</span><span>${S.mine.length} document${S.mine.length===1?'':'s'} reported · ${S.threads.length-1} claim${S.threads.length===2?'':'s'} in progress</span></div><button class="btn alt" style="margin-top:14px" onclick="logout()">Log out</button>`)}
+function logout(){closeSheet();['detail','report','chat','settings'].forEach(closeP);S.user=null;setTimeout(()=>{authMode('in');$('#auth').classList.remove('off')},250)}
+let sx=null;[['#isl',introNext]].forEach(([s,f])=>{const el=$(s);el.addEventListener('pointerdown',e=>sx=e.clientX);el.addEventListener('pointerup',e=>{if(sx!==null&&Math.abs(e.clientX-sx)>50)f(e.clientX<sx?1:-1);sx=null})});
+window.addEventListener('resize',()=>{renderList(true);renderThreads();renderAlerts()});
+document.fonts&&document.fonts.ready.then(()=>renderList(true));
+/* profile + settings */
+S.lang='en';S.th='system';S.nt={push:true,sms:true,mail:false};
+const COLS=['#0E6B47','#274C9B','#B4741C','#8A3AA3','#C9382C'];
+const ini=n=>n.split(' ').filter(Boolean).map(w=>w[0]).slice(0,2).join('').toUpperCase();
+const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function openProfile(){renderSettings();openP('settings')}
+function swr(k,l,s){return `<div class='rw'><div><b>${l}</b><div class='sub' style='margin:0;font-size:13px'>${s}</div></div><button type='button' class='sw ${S.nt[k]?'on':''}' role='switch' data-k='${k}' aria-label='${l}' onclick='S.nt[this.dataset.k]=!S.nt[this.dataset.k];this.classList.toggle("on")'></button></div>`}
+function renderSettings(){const u=S.user,st=$('#sbody').scrollTop;const ch=(a,cur,fn)=>a.map(([v,l])=>`<button type='button' class='chip ${cur===v?'on':''}' data-v='${v}' onclick='${fn}(this)'>${l}</button>`).join('');
+ $('#sbody').innerHTML=`<div class='shead'><div class='ava' id='sav'>${ini(u.name)}</div><div style='min-width:0'><h2>${esc(u.name)}</h2><div class='sub' style='margin:0'>${esc(u.email)}</div></div></div>
+ <div class='sec'>Avatar colour</div><div class='sw5'>${COLS.map(c=>`<button type='button' style='background:${c}' data-v='${c}' onclick='setCol(this.dataset.v)' aria-label='Colour'></button>`).join('')}</div>
+ <div class='sec'>Personal details</div>
+ <label class='lb' for='s1'>Full name</label><input class='in' id='s1' value='${esc(u.name)}' autocomplete='name'>
+ <label class='lb' for='s2'>Phone number (+237)</label><input class='in' id='s2' value='${u.phone}' inputmode='tel'>
+ <label class='lb' for='s3'>Email</label><input class='in' id='s3' type='email' value='${esc(u.email)}'>
+ <div class='err' id='serr'></div><button class='btn' onclick='saveProfile()'>Save changes</button>
+ <div class='sec'>Preferences</div><div class='grp'>
+ <div class='rw'><b>Language</b><div class='chips' style='padding:0'>${ch([['en','English'],['fr','Français']],S.lang,'pickLang')}</div></div>
+ <div class='rw'><b>Appearance</b><div class='chips' style='padding:0'>${ch([['system','System'],['light','Light'],['dark','Dark']],S.th,'pickTheme')}</div></div>
+ <div class='rw'><b>Default town</b><select style='flex:none;width:auto;max-width:150px' onchange='defTown(this.value)'><option value='all'>All towns</option>${['Bafoussam','Bamenda','Buea','Douala','Garoua','Yaoundé'].map(t=>`<option ${S.loc===t?'selected':''}>${t}</option>`).join('')}</select></div></div>
+ <div class='sec'>Notifications</div><div class='grp'>${swr('push','Push alerts','New matches for your saved searches')}${swr('sms','SMS alerts','When push is unavailable')}${swr('mail','Email receipts','Copies of your reports and claims')}</div>
+ <div class='sec'>Privacy and security</div><div class='grp'><button type='button' class='rw' onclick='pwSheet()'>Change password<span>›</span></button><button type='button' class='rw' onclick='toast("We will email a copy of your data to "+S.user.email)'>Download my data<span>›</span></button><button type='button' class='rw' style='color:var(--red)' onclick='delSheet()'>Delete my account<span>›</span></button></div>
+ <button class='btn out' style='margin-top:18px' onclick='logout()'>Log out</button>`;
+ $('#sbody').scrollTop=st;applyCol()}
+function applyCol(){const c=S.user&&S.user.col;['#av','#sav'].forEach(s=>{const e=$(s);if(e){e.style.background=c||'';e.style.color=c?'#fff':''}})}
+function setCol(c){S.user.col=c;applyCol()}
+function pick(el){el.parentNode.querySelectorAll('.chip').forEach(c=>c.classList.toggle('on',c===el))}
+function pickLang(el){pick(el);setLang(el.dataset.v);toast(el.dataset.v==='fr'?'Langue : Français':'Language: English')}
+function pickTheme(el){pick(el);S.th=el.dataset.v;if(S.th==='system')delete document.documentElement.dataset.theme;else document.documentElement.dataset.theme=S.th}
+function defTown(v){S.loc=v;initSearch();toast(v==='all'?'Default town cleared':'Default town: '+v)}
+function saveProfile(){const u=S.user,n=$('#s1').value.trim(),p=$('#s2').value.replace(/[\s+]|^237/g,''),m=$('#s3').value.trim().toLowerCase();
+ const e=x=>{const r=$('#serr');r.textContent=x;r.classList.remove('sh');void r.offsetWidth;r.classList.add('sh')};
+ if(n.length<2)return e('Enter your full name.');if(!/^6\d{8}$/.test(p))return e('Enter a valid 9-digit number starting with 6.');if(!/^\S+@\S+\.\S+$/.test(m))return e('Enter a valid email address.');
+ if(S.users.some(o=>o!==u&&(o.email===m||o.phone===p)))return e('Another account already uses this email or number.');
+ Object.assign(u,{name:n,phone:p,email:m});$('#av').textContent=ini(n);renderSettings();toast('Details saved')}
+function pwSheet(){openSheet(`<h2 style='font-size:22px'>Change password</h2><label class='lb' for='p1'>Current password</label><input class='in' id='p1' type='password' autocomplete='current-password'><label class='lb' for='p2'>New password</label><input class='in' id='p2' type='password' autocomplete='new-password' placeholder='At least 6 characters'><div class='err' id='perr'></div><button class='btn' onclick='savePw()'>Update password</button>`)}
+function savePw(){const e=$('#perr'),a=$('#p1').value,b=$('#p2').value;const bad=m=>{e.textContent=m;e.classList.remove('sh');void e.offsetWidth;e.classList.add('sh')};
+ if(a!==S.user.pw)return bad('Current password is wrong.');if(b.length<6)return bad('Password needs at least 6 characters.');S.user.pw=b;closeSheet();toast('Password updated')}
+function delSheet(){openSheet(`<h2 style='font-size:22px'>Delete your account?</h2><p class='sub'>Your profile and saved alerts are erased. Documents you reported stay with the team until they are returned. This cannot be undone.</p><button class='btn dng' style='margin-top:16px' onclick='delAcct()'>Delete my account</button><button class='btn alt' style='margin-top:10px' onclick='closeSheet()'>Keep my account</button>`)}
+function delAcct(){S.users=S.users.filter(u=>u!==S.user);logout();setTimeout(()=>toast('Account deleted'),700)}
+/* French translation layer */
+const FX={'Search':'Recherche','Report':'Signaler','Alerts':'Alertes','Find a lost document':'Trouver un document perdu','Town or name, e.g. Bafoussam':'Ville ou nom, ex. Bafoussam','All':'Tous','ID card':'Carte d’identité','Passport':'Passeport','Birth certificate':'Acte de naissance','Driver’s licence':'Permis de conduire','Other':'Autre','All towns':'Toutes les villes','Any date':'Toute date','Last 7 days':'7 derniers jours','Last 30 days':'30 derniers jours','Alert me for this search':'M’alerter pour cette recherche','No match yet':'Aucun résultat','Try another town or date, or tap “Alert me for this search”. We’ll tell you when one appears.':'Essayez une autre ville ou date, ou touchez « M’alerter pour cette recherche ». Nous vous prévenons dès qu’un document apparaît.',
+'Student card · P•••• L••':'Carte d’étudiant · P•••• L••','Found on a taxi seat. Held by finder.':'Trouvé sur un siège de taxi. Gardé par la personne qui l’a trouvé.','Passport cover is dark blue. Issued 2022.':'Couverture du passeport bleu foncé. Délivré en 2022.','Folded in a plastic sleeve.':'Plié dans une pochette plastique.','Category B licence.':'Permis de catégorie B.','Card is slightly bent.':'La carte est légèrement pliée.','Found near the pharmacy stalls.':'Trouvé près des étals de la pharmacie.','Photocopy certified, original attached.':'Photocopie certifiée, original joint.','University student card.':'Carte d’étudiant universitaire.',
+'Document details':'Détails du document','Found in':'Trouvé à','Place':'Lieu','Date':'Date','Note':'Note','Status':'Statut','Held safely by our team':'Gardé en sécurité par notre équipe','Details are hidden on purpose. To claim it, you’ll answer a question only the owner can answer. We then arrange the handoff for you.':'Les détails sont masqués volontairement. Pour le réclamer, vous répondrez à une question que seul le propriétaire connaît. Nous organisons ensuite la remise.','This is my document':'C’est mon document',
+'Prove it’s yours':'Prouvez que c’est le vôtre','This protects the real owner from false claims.':'Cela protège le vrai propriétaire des fausses réclamations.','Which town issued your card?':'Quelle ville a délivré votre carte ?','What is your date of birth?':'Quelle est votre date de naissance ?','What is your mother’s first name?':'Quel est le prénom de votre mère ?','Which date is printed as the issue date?':'Quelle date figure comme date de délivrance ?','Your answer':'Votre réponse','Photo of your own ID':'Photo de votre pièce d’identité','(optional, speeds things up)':'(facultatif, accélère le traitement)','Add photo':'Ajouter une photo','✓ ID photo added':'✓ Photo ajoutée','Send claim to Doc-Find team':'Envoyer la demande à l’équipe Doc-Find','Claim sent. Chat with the team now.':'Demande envoyée. Discutez avec l’équipe.',
+'I found a':'J’ai trouvé un','Report it in three steps. Our team checks it before anything goes public.':'Signalez-le en trois étapes. Notre équipe le vérifie avant toute publication.','The full document is never shown to the public. We blur the photo and hide the ID number.':'Le document complet n’est jamais montré au public. Nous floutons la photo et masquons le numéro.','Start report':'Commencer le signalement','Your recent reports':'Vos signalements récents','No reports yet. Thank you for being honest enough to be here.':'Aucun signalement pour l’instant. Merci pour votre honnêteté.','In review':'En examen',
+'Photograph it':'Photographiez-le','Where and what':'Où et quoi','Your consent':'Votre consentement','Report sent':'Signalement envoyé','Place the document flat and fit it inside the frame':'Posez le document à plat et cadrez-le','Preview of the public listing. The photo is blurred and the ID number and name are hidden.':'Aperçu de l’annonce publique. La photo est floutée, le numéro et le nom sont masqués.','Continue':'Continuer','Document type':'Type de document','Town where you found it':'Ville où vous l’avez trouvé','Exact place':'Lieu précis','e.g. Marché Mokolo, near the bank':'ex. Marché Mokolo, près de la banque','(optional)':'(facultatif)','Anything that helps':'Tout détail utile','Nothing is selected for you. Tick each box to agree.':'Rien n’est coché pour vous. Cochez chaque case pour accepter.','Photo and location':'Photo et lieu','Doc-Find may store this photo and where I found it, to help the owner.':'Doc-Find peut conserver cette photo et le lieu de découverte pour aider le propriétaire.','Phone number for handoff':'Numéro de téléphone pour la remise','The team may call me to arrange handing the document over. Owners never see my number.':'L’équipe peut m’appeler pour organiser la remise. Les propriétaires ne voient jamais mon numéro.','Your data is handled under Cameroon’s Law No. 2024/017 on personal data protection. You can withdraw consent anytime.':'Vos données sont traitées conformément à la loi camerounaise n° 2024/017 sur la protection des données personnelles. Vous pouvez retirer votre consentement à tout moment.','Submit for review':'Envoyer pour examen','Thank you':'Merci','Someone is going to be very relieved.':'Quelqu’un va être très soulagé.','Report received':'Signalement reçu','Just now':'À l’instant','Team review':'Examen par l’équipe','Usually within a few hours':'Généralement sous quelques heures','Posted with redaction':'Publié avec masquage','Handoff with the owner':'Remise au propriétaire','Done':'Terminé',
+'You talk to the Doc-Find team. Never directly to the finder.':'Vous parlez à l’équipe Doc-Find, jamais directement à la personne qui a trouvé le document.','Welcome to Doc-Find. Ask us anything about finding or returning a document.':'Bienvenue sur Doc-Find. Posez-nous vos questions sur la recherche ou la remise d’un document.','Welcome to Doc-Find':'Bienvenue sur Doc-Find','Claim under review':'Demande en cours d’examen','Thanks. We received your answer and will check it against the document. This usually takes a few minutes.':'Merci. Nous avons reçu votre réponse et la comparons au document. Cela prend généralement quelques minutes.','Happy to help. A team member will reply shortly.':'Avec plaisir. Un membre de l’équipe vous répondra bientôt.','Write a message':'Écrire un message','We notify you when a matching document is posted.':'Nous vous prévenons lorsqu’un document correspondant est publié.','Push + SMS when posted':'Push + SMS à la publication','Paused':'En pause',
+'Welcome back':'Bon retour','Create your account':'Créez votre compte','Log in to find or return a document.':'Connectez-vous pour trouver ou rendre un document.','Log in':'Se connecter','Create account':'Créer un compte','Email or phone':'E-mail ou téléphone','you@email.com or 6XXXXXXXX':'vous@email.com ou 6XXXXXXXX','Password':'Mot de passe','Your password':'Votre mot de passe','Show':'Afficher','Hide':'Masquer','Fill in':'Remplir','Full name':'Nom complet','Your full name':'Votre nom complet','Phone number (+237)':'Numéro de téléphone (+237)','Email':'E-mail','you@email.com':'vous@email.com','At least 6 characters':'Au moins 6 caractères','I agree that Doc-Find stores my name, phone and email to run my account (Law No. 2024/017). I can withdraw anytime.':'J’accepte que Doc-Find conserve mon nom, mon téléphone et mon e-mail pour gérer mon compte (loi n° 2024/017). Je peux me rétracter à tout moment.','Wrong email, phone or password. New here? Create an account.':'E-mail, téléphone ou mot de passe incorrect. Nouveau ? Créez un compte.','Enter your full name.':'Entrez votre nom complet.','Enter a valid 9-digit number starting with 6.':'Entrez un numéro valide de 9 chiffres commençant par 6.','Enter a valid email address.':'Entrez une adresse e-mail valide.','Password needs at least 6 characters.':'Le mot de passe doit contenir au moins 6 caractères.','An account with this email or number already exists. Log in instead.':'Un compte existe déjà avec cet e-mail ou ce numéro. Connectez-vous.','Tick the consent box to continue.':'Cochez la case de consentement pour continuer.','Skip':'Passer','Next':'Suivant','Get started':'Commencer','Lost an ID or passport?':'Perdu une pièce d’identité ou un passeport ?','Search documents found across Cameroon by town, date and type.':'Cherchez les documents trouvés au Cameroun par ville, date et type.','Found one? Report it fast.':'Vous en avez trouvé un ? Signalez-le vite.','Snap a photo. We blur and redact it before anything goes public.':'Prenez une photo. Nous la floutons et masquons les données avant publication.','A safe handoff, every time.':'Une remise sécurisée, à chaque fois.','Owners prove ownership first. Our team arranges the return.':'Les propriétaires prouvent d’abord leur identité. Notre équipe organise la remise.',
+'Profile and settings':'Profil et paramètres','Avatar colour':'Couleur de l’avatar','Personal details':'Informations personnelles','Save changes':'Enregistrer','Preferences':'Préférences','Language':'Langue','Appearance':'Apparence','System':'Système','Light':'Clair','Dark':'Sombre','Default town':'Ville par défaut','Notifications':'Notifications','Push alerts':'Alertes push','New matches for your saved searches':'Nouveaux résultats pour vos recherches enregistrées','SMS alerts':'Alertes SMS','When push is unavailable':'Quand le push est indisponible','Email receipts':'Reçus par e-mail','Copies of your reports and claims':'Copies de vos signalements et demandes','Privacy and security':'Confidentialité et sécurité','Change password':'Changer le mot de passe','Download my data':'Télécharger mes données','Delete my account':'Supprimer mon compte','Log out':'Se déconnecter','Details saved':'Informations enregistrées','Current password':'Mot de passe actuel','New password':'Nouveau mot de passe','Update password':'Mettre à jour','Current password is wrong.':'Le mot de passe actuel est incorrect.','Password updated':'Mot de passe mis à jour','Another account already uses this email or number.':'Un autre compte utilise déjà cet e-mail ou ce numéro.','Delete your account?':'Supprimer votre compte ?','Your profile and saved alerts are erased. Documents you reported stay with the team until they are returned. This cannot be undone.':'Votre profil et vos alertes sont effacés. Les documents signalés restent chez l’équipe jusqu’à leur remise. Cette action est irréversible.','Keep my account':'Garder mon compte','Account deleted':'Compte supprimé','Default town cleared':'Ville par défaut retirée'};
+const FS=[['Birth certificate','Acte de naissance'],['Driver’s licence','Permis de conduire'],['ID card','Carte d’identité'],['Passport','Passeport'],['Any town','Toutes les villes'],['Alert saved:','Alerte enregistrée :'],['Welcome,','Bienvenue,'],['Demo:','Démo :'],['Default town:','Ville par défaut :'],['We will email a copy of your data to','Nous enverrons une copie de vos données à'],['Doc-Find team','Équipe Doc-Find'],['replies in minutes','répond en quelques minutes'],['Yesterday','Hier'],['Today','Aujourd’hui']];
+const FR=[[/(\d+) days ago/g,(m,n)=>'il y a '+n+' jours'],[/^(\d+) documents? found$/,(m,n)=>n+(n==1?' document trouvé':' documents trouvés')],[/^Noted\. Your answer matches\. Please bring your original ID to our Doc-Find point in (.+) and we will hand it over\.$/,(m,t)=>'Bien noté. Votre réponse correspond. Apportez votre pièce d’identité originale à notre point Doc-Find de '+t+' et nous vous remettrons le document.'],[/^I think this is my .+\.$/,()=>'Je pense que c’est mon document.']];
+function trn(s){const m=s.match(/^(\s*)([\s\S]*?)(\s*)$/),k=m[2];if(!k)return s;if(FX[k])return m[1]+FX[k]+m[3];let o=k;FR.forEach(([r,f])=>{o=o.replace(r,f)});FS.forEach(([a,b])=>{o=o.split(a).join(b)});return m[1]+o+m[3]}
+function applyFr(){if(S.lang!=='fr')return;const w=document.createTreeWalker($('#ph'),NodeFilter.SHOW_TEXT);let n;while(n=w.nextNode()){if(n.__o===undefined){n.__o=n.data;n.data=trn(n.__o)}}
+ document.querySelectorAll('#ph [placeholder]').forEach(e=>{if(e.dataset.op===undefined){e.dataset.op=e.placeholder;e.placeholder=FX[e.dataset.op]||e.placeholder}})}
+function setLang(l){S.lang=l;document.documentElement.lang=l;if(l==='fr')return applyFr();
+ const w=document.createTreeWalker($('#ph'),NodeFilter.SHOW_TEXT);let n;while(n=w.nextNode()){if(n.__o!==undefined){n.data=n.__o;n.__o=undefined}}
+ document.querySelectorAll('#ph [placeholder]').forEach(e=>{if(e.dataset.op!==undefined){e.placeholder=e.dataset.op;delete e.dataset.op}})}
+let fq=0;new MutationObserver(()=>{if(S.lang==='fr'&&!fq){fq=1;requestAnimationFrame(()=>{fq=0;applyFr()})}}).observe($('#ph'),{childList:true,subtree:true});
+drawIntro();authMode('in');
+renderNav();initSearch();
+</script>
+</body></html>
