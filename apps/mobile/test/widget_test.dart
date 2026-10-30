@@ -9,6 +9,9 @@ void main() {
     await tester.pumpWidget(const ProviderScope(child: DocFindApp()));
     await tester.pump();
 
-    expect(find.text('Splash Screen'), findsOneWidget);
+    expect(find.text('Doc-Find'), findsOneWidget);
+
+    // Pump past splash timer
+    await tester.pump(const Duration(seconds: 4));
   });
 }
