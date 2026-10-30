@@ -1,0 +1,142 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #EDF1EE;
+  --surf: #ffffff;
+  --ink: #10231A;
+  --mute: #5C6B63;
+  --g: #0E6B47;
+  --g2: #DCEDE3;
+  --sun: #F5B700;
+  --red: #C9382C;
+  --red2: #FBE3E0;
+  --amb: #8A6500;
+  --amb2: #FCEFC4;
+  --line: #D8E0DA;
+  --onG: #ffffff;
+  --side: #0B2A1E;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0A110D;
+    --surf: #131E18;
+    --ink: #E8F0EB;
+    --mute: #93A59A;
+    --g: #3DBF86;
+    --g2: #1B3A2C;
+    --red2: #3A1A17;
+    --amb: #F5C84A;
+    --amb2: #3A2F0E;
+    --line: #26372E;
+    --onG: #06140D;
+    --side: #070E0A;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #0A110D;
+  --surf: #131E18;
+  --ink: #E8F0EB;
+  --mute: #93A59A;
+  --g: #3DBF86;
+  --g2: #1B3A2C;
+  --red2: #3A1A17;
+  --amb: #F5C84A;
+  --amb2: #3A2F0E;
+  --line: #26372E;
+  --onG: #06140D;
+  --side: #070E0A;
+}
+
+:root[data-theme="light"] {
+  --bg: #EDF1EE;
+  --surf: #ffffff;
+  --ink: #10231A;
+  --mute: #5C6B63;
+  --g: #0E6B47;
+  --g2: #DCEDE3;
+  --sun: #F5B700;
+  --red: #C9382C;
+  --red2: #FBE3E0;
+  --amb: #8A6500;
+  --amb2: #FCEFC4;
+  --line: #D8E0DA;
+  --onG: #ffffff;
+  --side: #0B2A1E;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body, #app {
+  height: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: Figtree, system-ui, -apple-system, sans-serif;
+  font-size: 14.5px;
+  line-height: 1.45;
+}
+
+h1, h2, h3, .disp {
+  font-family: 'Bricolage Grotesque', Figtree, system-ui, sans-serif;
+  letter-spacing: -0.02em;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: 3px solid var(--sun);
+  outline-offset: 2px;
+}
+
+@keyframes inAnimation {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-in {
+  animation: inAnimation 0.35s both;
+}
+
+@keyframes growAnimation {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+.animate-grow {
+  transform-origin: bottom;
+  animation: growAnimation 0.8s cubic-bezier(0.2, 1, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0s !important;
+    transition-duration: 0.01ms !important;
+  }
+}

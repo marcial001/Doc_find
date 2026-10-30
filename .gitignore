@@ -25,8 +25,10 @@ apps/mobile/.pub/
 # Node
 node_modules/
 dist/
+coverage/
 apps/admin/node_modules/
 apps/admin/dist/
+apps/admin/coverage/
 
 # Python
 __pycache__/
