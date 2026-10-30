@@ -50,7 +50,7 @@ class MockSearchDataSource {
 
   Future<Result<Listing?>> getListingById(int id) async {
     await Future<void>.delayed(const Duration(milliseconds: 100));
-    final Listing? item = _listings.firstWhere(
+    final Listing item = _listings.firstWhere(
       (Listing l) => l.id == id,
       orElse: () => const Listing(
         id: -1,
@@ -64,7 +64,7 @@ class MockSearchDataSource {
       ),
     );
 
-    if (item == null || item.id == -1) {
+    if (item.id == -1) {
       return Result.success(null);
     }
     return Result.success(item);

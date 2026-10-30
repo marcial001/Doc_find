@@ -1,17 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../features/alerts/presentation/screens/alerts_screen.dart';
 import '../../features/auth/presentation/controllers/auth_controller.dart';
 import '../../features/auth/presentation/screens/auth_screen.dart';
 import '../../features/listing_detail/presentation/screens/listing_detail_screen.dart';
+import '../../features/messages/presentation/screens/chat_screen.dart';
+import '../../features/messages/presentation/screens/messages_screen.dart';
 import '../../features/onboarding/presentation/screens/onboarding_screen.dart';
+import '../../features/profile/presentation/screens/profile_screen.dart';
+import '../../features/report/presentation/screens/report_flow_screen.dart';
+import '../../features/report/presentation/screens/report_screen.dart';
 import '../../features/search/presentation/screens/search_screen.dart';
 import '../../features/shell/presentation/screens/shell_screen.dart';
 import '../../features/splash/presentation/screens/splash_screen.dart';
 import '../widgets/app_bottom_nav.dart';
 import 'route_paths.dart';
 
-final routerProvider = Provider<GoRouter>((Ref ref) {
+final Provider<GoRouter> routerProvider = Provider<GoRouter>((Ref ref) {
   final AuthState authState = ref.watch(authControllerProvider);
 
   return GoRouter(
@@ -76,10 +82,15 @@ final routerProvider = Provider<GoRouter>((Ref ref) {
           return const NoTransitionPage<void>(
             child: ShellScreen(
               currentTab: NavTab.report,
-              child: Center(child: Text('Report Feature')),
+              child: ReportScreen(),
             ),
           );
         },
+      ),
+      GoRoute(
+        path: RoutePaths.reportFlow,
+        builder: (BuildContext context, GoRouterState state) =>
+            const ReportFlowScreen(),
       ),
       GoRoute(
         path: RoutePaths.messages,
@@ -87,9 +98,16 @@ final routerProvider = Provider<GoRouter>((Ref ref) {
           return const NoTransitionPage<void>(
             child: ShellScreen(
               currentTab: NavTab.messages,
-              child: Center(child: Text('Messages Feature')),
+              child: MessagesScreen(),
             ),
           );
+        },
+      ),
+      GoRoute(
+        path: RoutePaths.chat,
+        builder: (BuildContext context, GoRouterState state) {
+          final int id = int.tryParse(state.pathParameters['id'] ?? '') ?? 0;
+          return ChatScreen(threadId: id);
         },
       ),
       GoRoute(
@@ -98,16 +116,15 @@ final routerProvider = Provider<GoRouter>((Ref ref) {
           return const NoTransitionPage<void>(
             child: ShellScreen(
               currentTab: NavTab.alerts,
-              child: Center(child: Text('Alerts Feature')),
+              child: AlertsScreen(),
             ),
           );
         },
       ),
       GoRoute(
         path: RoutePaths.profile,
-        builder: (BuildContext context, GoRouterState state) {
-          return const Scaffold(body: Center(child: Text('Profile Feature')));
-        },
+        builder: (BuildContext context, GoRouterState state) =>
+            const ProfileScreen(),
       ),
     ],
   );

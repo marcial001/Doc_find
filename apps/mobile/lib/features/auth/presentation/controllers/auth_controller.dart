@@ -106,6 +106,18 @@ class AuthController extends StateNotifier<AuthState> {
     );
   }
 
+  Future<Result<void>> changePassword(
+    String currentPassword,
+    String newPassword,
+  ) async {
+    return _repository.changePassword(currentPassword, newPassword);
+  }
+
+  Future<void> deleteAccount() async {
+    await _repository.deleteAccount();
+    state = const AuthState();
+  }
+
   Future<void> logout() async {
     await _repository.logout();
     state = const AuthState();

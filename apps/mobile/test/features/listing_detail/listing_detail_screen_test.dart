@@ -1,8 +1,6 @@
-import 'package:doc_find/core/constants/document_types.dart';
 import 'package:doc_find/core/l10n/l10n.dart';
 import 'package:doc_find/core/widgets/redacted_doc.dart';
 import 'package:doc_find/features/listing_detail/presentation/screens/listing_detail_screen.dart';
-import 'package:doc_find/shared/domain/entities/listing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';

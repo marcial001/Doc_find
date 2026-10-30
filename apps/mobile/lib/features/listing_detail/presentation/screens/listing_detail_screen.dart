@@ -28,7 +28,9 @@ class ListingDetailScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final sc.SearchFeedState searchState = ref.watch(sc.searchControllerProvider);
+    final sc.SearchFeedState searchState = ref.watch(
+      sc.searchControllerProvider,
+    );
 
     final Listing? listing = searchState.listings.cast<Listing?>().firstWhere(
       (Listing? l) => l?.id == listingId,
@@ -38,7 +40,7 @@ class ListingDetailScreen extends ConsumerWidget {
     if (listing == null) {
       return Scaffold(
         appBar: AppBar(title: Text(context.l10n.detailTitle)),
-        body: Center(
+        body: const Center(
           child: Text('Document not found', style: AppTypography.bodyMedium),
         ),
       );

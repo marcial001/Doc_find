@@ -8,25 +8,28 @@ import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/widgets/app_bottom_nav.dart';
 import '../../../auth/presentation/controllers/auth_controller.dart';
+import '../../../messages/presentation/controllers/messages_controller.dart';
 
 class ShellScreen extends ConsumerWidget {
   const ShellScreen({
     required this.child,
     required this.currentTab,
-    this.unreadMessagesCount = 1,
+    this.unreadMessagesCount,
     super.key,
   });
 
   final Widget child;
   final NavTab currentTab;
-  final int unreadMessagesCount;
+  final int? unreadMessagesCount;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final authState = ref.watch(authControllerProvider);
+    final messagesState = ref.watch(messagesControllerProvider);
     final user = authState.user;
+    final int unreadCount = unreadMessagesCount ?? messagesState.totalUnread;
 
     Color avatarColor = AppColors.lightPrimary;
     if (user != null && user.avatarColorHex.isNotEmpty) {
@@ -101,7 +104,7 @@ class ShellScreen extends ConsumerWidget {
                             size: 24,
                             color: theme.colorScheme.onSurface,
                           ),
-                          if (unreadMessagesCount > 0)
+                          if (unreadCount > 0)
                             Positioned(
                               top: 2,
                               right: 2,
@@ -162,7 +165,7 @@ class ShellScreen extends ConsumerWidget {
       body: child,
       bottomNavigationBar: AppBottomNav(
         currentTab: currentTab,
-        unreadMessagesCount: unreadMessagesCount,
+        unreadMessagesCount: unreadCount,
         onTabSelected: (NavTab tab) {
           switch (tab) {
             case NavTab.search:

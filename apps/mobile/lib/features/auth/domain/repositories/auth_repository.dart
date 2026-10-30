@@ -16,5 +16,12 @@ abstract class AuthRepository {
 
   Future<Result<User>> updateProfile(User user);
 
+  Future<Result<void>> changePassword(
+    String currentPassword,
+    String newPassword,
+  );
+
+  Future<Result<void>> deleteAccount();
+
   Future<Result<void>> logout();
 }

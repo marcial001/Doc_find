@@ -106,6 +106,36 @@ class MockAuthDataSource {
     return Result.success(user);
   }
 
+  Future<Result<void>> changePassword(
+    String currentPassword,
+    String newPassword,
+  ) async {
+    if (_currentUser == null) {
+      return Result.failure(const AuthFailure('Not authenticated'));
+    }
+    final String? expected =
+        _passwords[_currentUser!.email] ?? _passwords[_currentUser!.phone];
+    if (expected != currentPassword) {
+      return Result.failure(const AuthFailure('Current password is wrong.'));
+    }
+    if (newPassword.length < 6) {
+      return Result.failure(
+        const ValidationFailure('Password needs at least 6 characters.'),
+      );
+    }
+    _passwords[_currentUser!.email] = newPassword;
+    _passwords[_currentUser!.phone] = newPassword;
+    return Result.success(null);
+  }
+
+  Future<Result<void>> deleteAccount() async {
+    if (_currentUser != null) {
+      _users.removeWhere((User u) => u.id == _currentUser!.id);
+      _currentUser = null;
+    }
+    return Result.success(null);
+  }
+
   Future<Result<void>> logout() async {
     _currentUser = null;
     return Result.success(null);
