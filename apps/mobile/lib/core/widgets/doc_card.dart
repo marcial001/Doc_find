@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import '../constants/document_types.dart';
 import '../theme/app_colors.dart';
@@ -59,15 +60,20 @@ class _DocCardState extends State<DocCard> with SingleTickerProviderStateMixin {
 
     final int delayMs =
         widget.animationIndex * AppMotion.listStaggerDelay.inMilliseconds;
-    Future<void>.delayed(Duration(milliseconds: delayMs), () {
-      if (mounted) {
-        _controller.forward();
-      }
-    });
+    if (delayMs > 0) {
+      _staggerTimer = Timer(Duration(milliseconds: delayMs), () {
+        if (mounted) _controller.forward();
+      });
+    } else {
+      _controller.forward();
+    }
   }
+
+  Timer? _staggerTimer;
 
   @override
   void dispose() {
+    _staggerTimer?.cancel();
     _controller.dispose();
     super.dispose();
   }

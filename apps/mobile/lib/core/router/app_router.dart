@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../features/auth/presentation/controllers/auth_controller.dart';
 import '../../features/auth/presentation/screens/auth_screen.dart';
+import '../../features/listing_detail/presentation/screens/listing_detail_screen.dart';
 import '../../features/onboarding/presentation/screens/onboarding_screen.dart';
+import '../../features/search/presentation/screens/search_screen.dart';
 import '../../features/shell/presentation/screens/shell_screen.dart';
 import '../../features/splash/presentation/screens/splash_screen.dart';
 import '../widgets/app_bottom_nav.dart';
@@ -56,9 +58,16 @@ final routerProvider = Provider<GoRouter>((Ref ref) {
           return const NoTransitionPage<void>(
             child: ShellScreen(
               currentTab: NavTab.search,
-              child: Center(child: Text('Search Feature')),
+              child: SearchScreen(),
             ),
           );
+        },
+      ),
+      GoRoute(
+        path: RoutePaths.detail,
+        builder: (BuildContext context, GoRouterState state) {
+          final int id = int.tryParse(state.pathParameters['id'] ?? '') ?? 1;
+          return ListingDetailScreen(listingId: id);
         },
       ),
       GoRoute(
