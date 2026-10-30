@@ -7,3 +7,5 @@
 - 2026-10-29: Chosen `Result<T, Failure>` value type pattern for robust, predictable error handling without uncaught widget exceptions.
 - 2026-10-29: Offline-first architecture for mock repositories implementing domain repository interfaces, ensuring zero UI changes when swapping in remote REST/Supabase datasources.
 - 2026-10-29: Adopted local bundled asset fonts (`Bricolage Grotesque` and `Figtree`) to prevent network calls and guarantee offline availability.
+- 2026-10-30: Implemented Cameroon Law No. 2024/017 compliance across all forms: explicit, unchecked-by-default dual consents for document storage and contact coordination; unredacted data is kept isolated from the public UI.
+- 2026-10-30: Connected top-level dynamic unread badge count to `MessagesController.totalUnread` so bottom navigation and shell app bar bell icon reactively reflect incoming conversations and claims.
