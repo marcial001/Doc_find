@@ -14,3 +14,6 @@
 - 2026-10-30: Review queue supports keyboard accessibility (`A` to approve, `R` to reject modal, `ArrowUp`/`ArrowDown` navigation) and live redaction slider preview with quality score badges.
 - 2026-10-30: Master-detail views (`/queue` and `/claims`) adapt dynamically: two-column layout on desktop, stacked with a dedicated "← Back" button on mobile (<820px).
 - 2026-10-30: Vitest test suite achieved 88/88 passing tests and 90.44% statement coverage / 91.79% lines coverage, surpassing the ≥80% Definition of Done requirement.
+- 2026-10-30: Built Phase 3 Backend API (`services/api`) with FastAPI, SQLAlchemy 2.0, and Pydantic v2. Utilized native `bcrypt` cryptographic hashing for seamless Python 3.12 compatibility.
+- 2026-10-30: Hardened Cameroon Law No. 2024/017 at the API layer: mandatory dual consents for submissions (`photo_consent`, `location_consent`), mandatory opt-in on user registration, and sensitive audit logging (`is_sensitive=True`) on original unredacted photo reveals and claimant flags.
+- 2026-10-30: Pytest test suite achieved 25/25 passing tests (100%) and 92% statement coverage, surpassing the ≥80% Definition of Done requirement.
