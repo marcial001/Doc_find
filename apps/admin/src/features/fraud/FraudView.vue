@@ -23,7 +23,7 @@ function handleDismiss(id: number) {
     <div
       v-for="(f, i) in fraudStore.reports"
       :key="f.id"
-      class="bg-surf border border-line rounded-[18px] p-4.5 flex flex-col justify-between animate-in"
+      class="app-card p-4.5 flex flex-col justify-between animate-in hover:shadow-md transition-shadow"
       :style="{ animationDelay: `${i * 70}ms` }"
     >
       <div>

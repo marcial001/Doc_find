@@ -49,34 +49,39 @@ const recentEvents = computed(() => auditStore.events.slice(0, 5))
 </script>
 
 <template>
-  <div class="space-y-4">
+  <div class="space-y-4 md:space-y-5">
     <!-- 4 KPI Cards -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4">
       <div
         v-for="(kpi, i) in kpis"
         :key="kpi.label"
-        class="bg-surf border border-line rounded-[18px] p-4.5 animate-in"
+        class="app-card p-4.5 animate-in hover:shadow-md transition-shadow"
         :style="{ animationDelay: `${i * 70}ms` }"
       >
         <small class="text-mute font-medium text-xs">{{ kpi.label }}</small>
-        <div class="font-display font-extrabold text-[34px] leading-tight mt-1 text-ink">
+        <div class="font-display font-extrabold text-[32px] sm:text-[34px] leading-tight mt-1 text-ink">
           {{ kpi.count }}
         </div>
         <div
-          class="text-[12.5px] mt-0.5 font-semibold"
+          class="text-[12.5px] mt-1 font-semibold flex items-center gap-1"
           :class="kpi.isWarn ? 'text-amb' : 'text-g'"
         >
+          <span class="inline-block w-1.5 h-1.5 rounded-full" :class="kpi.isWarn ? 'bg-amb' : 'bg-g'" />
           {{ kpi.desc }}
         </div>
       </div>
     </div>
 
     <!-- Charts & Activity Grid -->
-    <div class="grid grid-cols-1 lg:grid-cols-[1.6fr_1fr] gap-3.5">
+    <div class="grid grid-cols-1 lg:grid-cols-[1.6fr_1fr] gap-4">
       <!-- Weekly Chart -->
-      <div class="bg-surf border border-line rounded-[18px] p-4.5">
-        <h3 class="font-display font-bold text-lg text-ink">This week</h3>
-        <div class="flex items-end gap-3.5 h-[190px] pt-3">
+      <div class="app-card p-4.5 sm:p-5 flex flex-col justify-between">
+        <div class="flex items-center justify-between">
+          <h3 class="font-display font-bold text-base sm:text-lg text-ink">This week</h3>
+          <span class="text-xs text-mute font-medium">Activity overview</span>
+        </div>
+
+        <div class="flex items-end gap-2 sm:gap-3.5 h-[190px] pt-4">
           <div
             v-for="(day, i) in daysOfWeek"
             :key="day"
@@ -85,27 +90,29 @@ const recentEvents = computed(() => auditStore.events.slice(0, 5))
             <div class="flex gap-1 items-end h-full w-full justify-center">
               <!-- Submitted bar (green) -->
               <i
-                class="w-[38%] max-w-[22px] rounded-t-md bg-g animate-grow"
+                class="w-[42%] max-w-[22px] rounded-t-md bg-g animate-grow"
                 :style="{
                   height: `${(submittedWeekly[i] / maxWeekly) * 100}%`,
                   animationDelay: `${i * 70}ms`
                 }"
+                :title="`${submittedWeekly[i]} submitted`"
               />
               <!-- Returned bar (gold) -->
               <i
-                class="w-[38%] max-w-[22px] rounded-t-md bg-sun animate-grow"
+                class="w-[42%] max-w-[22px] rounded-t-md bg-sun animate-grow"
                 :style="{
                   height: `${(returnedWeekly[i] / maxWeekly) * 100}%`,
                   animationDelay: `${i * 70 + 90}ms`
                 }"
+                :title="`${returnedWeekly[i]} returned`"
               />
             </div>
-            <span class="text-xs text-mute">{{ day }}</span>
+            <span class="text-xs text-mute font-medium">{{ day }}</span>
           </div>
         </div>
 
         <!-- Legend -->
-        <div class="flex gap-4 text-[12.5px] text-mute mt-2 pt-2 border-t border-line/50">
+        <div class="flex gap-4 text-xs text-mute mt-3 pt-3 border-t border-line/60 flex-wrap">
           <span class="flex items-center gap-1.5">
             <i class="inline-block w-2.5 h-2.5 rounded-[3px] bg-g not-italic" />
             Found documents submitted
@@ -118,21 +125,25 @@ const recentEvents = computed(() => auditStore.events.slice(0, 5))
       </div>
 
       <!-- Recent Activity Feed -->
-      <div class="bg-surf border border-line rounded-[18px] p-4.5 flex flex-col justify-between">
-        <h3 class="font-display font-bold text-lg text-ink mb-2">Recent activity</h3>
+      <div class="app-card p-4.5 sm:p-5 flex flex-col justify-between">
+        <div class="flex items-center justify-between mb-2">
+          <h3 class="font-display font-bold text-base sm:text-lg text-ink">Recent activity</h3>
+          <span class="text-xs text-mute font-medium">Live audit feed</span>
+        </div>
+
         <div class="divide-y divide-line">
           <div
             v-for="(item, idx) in recentEvents"
             :key="idx"
-            class="flex gap-3 py-2.5 text-[13.5px] text-ink items-start"
+            class="flex gap-3 py-2.5 text-[13px] sm:text-[13.5px] text-ink items-start"
           >
             <i
               class="flex-none w-2.5 h-2.5 rounded-full mt-1.5 not-italic"
               :class="item.s === 1 ? 'bg-red' : 'bg-g'"
             />
-            <div class="flex-1">
-              <div>{{ item.w }}</div>
-              <small class="block text-mute text-xs">{{ item.t }}</small>
+            <div class="flex-1 min-w-0">
+              <div class="truncate sm:whitespace-normal">{{ item.w }}</div>
+              <small class="block text-mute text-xs mt-0.5">{{ item.t }}</small>
             </div>
           </div>
         </div>
@@ -142,12 +153,15 @@ const recentEvents = computed(() => auditStore.events.slice(0, 5))
     <!-- Needs Attention Banner -->
     <div
       v-if="submissionsStore.queueCount > 0"
-      class="bg-surf border border-line rounded-[18px] p-4.5 flex items-center justify-between gap-3.5 flex-wrap"
+      class="app-card p-4.5 sm:p-5 flex items-center justify-between gap-4 flex-wrap bg-gradient-to-r from-surf to-g2/20"
     >
-      <div class="flex-1 min-w-[200px]">
-        <h3 class="font-display font-bold text-lg text-ink">Needs attention</h3>
-        <span class="text-mute text-sm">
-          {{ submissionsStore.queueCount }} submissions are waiting for redaction and approval.
+      <div class="flex-1 min-w-[240px]">
+        <div class="flex items-center gap-2">
+          <span class="text-lg">⚡</span>
+          <h3 class="font-display font-bold text-base sm:text-lg text-ink">Needs attention</h3>
+        </div>
+        <span class="text-mute text-sm mt-0.5 block">
+          {{ submissionsStore.queueCount }} pending submissions are waiting for verification, redaction, and publishing.
         </span>
       </div>
       <AppButton @click="router.push('/queue')">

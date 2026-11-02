@@ -85,7 +85,7 @@ function navigate(path: string) {
 
 <template>
   <aside
-    class="bg-side text-[#E8F0EB] flex flex-col p-4 md:py-[18px] md:px-3 gap-1 overflow-auto max-md:flex-row max-md:p-1.5 max-md:pb-[calc(env(safe-area-inset-bottom,0px)+6px)] max-md:justify-around max-md:overflow-x-auto max-md:gap-0 max-md:z-30 select-none"
+    class="bg-side text-[#E8F0EB] flex flex-col p-4 md:py-[18px] md:px-3 gap-1 overflow-auto max-md:flex-row max-md:p-1.5 max-md:pb-[calc(env(safe-area-inset-bottom,0px)+6px)] max-md:justify-around max-md:overflow-x-auto no-scrollbar max-md:gap-0 max-md:z-30 select-none flex-none"
   >
     <!-- Brand (Desktop only) -->
     <div class="hidden md:flex items-center gap-2.5 px-2.5 pt-1 pb-4 font-display font-extrabold text-[20px] text-white">

@@ -7,7 +7,7 @@ const auditStore = useAuditStore()
 </script>
 
 <template>
-  <div class="bg-surf border border-line rounded-[18px] p-4.5 space-y-3.5">
+  <div class="app-card p-4.5 space-y-3.5">
     <!-- Header with Toggle Button -->
     <div class="flex items-center justify-between gap-3 flex-wrap">
       <span class="text-mute text-sm">

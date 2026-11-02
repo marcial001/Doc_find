@@ -7,6 +7,9 @@ export default {
   darkMode: ['selector', '[data-theme="dark"]'],
   theme: {
     extend: {
+      spacing: {
+        '4.5': '1.125rem', // 18px matching design token
+      },
       colors: {
         bg: 'var(--bg)',
         surf: 'var(--surf)',

@@ -140,7 +140,7 @@ function handleMarkHandedOver(id: number) {
       <!-- Side-by-side Public Listing & Proof Verification -->
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
         <!-- Public Listing Preview -->
-        <div class="bg-surf border border-line rounded-[18px] p-4.5">
+        <div class="app-card p-4.5">
           <div class="text-xs font-semibold text-mute mb-2">
             <span>PUBLIC LISTING</span>
           </div>
@@ -152,7 +152,7 @@ function handleMarkHandedOver(id: number) {
         </div>
 
         <!-- Proof of Ownership Comparison -->
-        <div class="bg-surf border border-line rounded-[18px] p-4.5">
+        <div class="app-card p-4.5">
           <div class="flex justify-between items-center text-xs font-semibold text-mute mb-2">
             <span>PROOF OF OWNERSHIP</span>
             <AppPill
@@ -209,7 +209,7 @@ function handleMarkHandedOver(id: number) {
       </div>
 
       <!-- Claimant Conversation Card -->
-      <div class="bg-surf border border-line rounded-[18px] p-4.5">
+      <div class="app-card p-4.5">
         <div class="text-xs font-semibold text-mute mb-2">
           <span>CONVERSATION (claimant ↔ admin)</span>
         </div>
@@ -264,7 +264,7 @@ function handleMarkHandedOver(id: number) {
       </div>
 
       <!-- Action Buttons Card -->
-      <div class="bg-surf border border-line rounded-[18px] p-4.5 flex gap-2.5 items-center flex-wrap">
+      <div class="app-card p-4.5 flex gap-2.5 items-center flex-wrap">
         <template v-if="selectedClaim.st === 'new' || selectedClaim.st === 'more'">
           <AppButton variant="primary" @click="handleHandoffSheet(selectedClaim)">
             Verify and arrange handoff

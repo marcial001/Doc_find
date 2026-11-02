@@ -37,7 +37,7 @@ function handleOpenBulk() {
     </div>
 
     <!-- Filter Bar and Table Card -->
-    <div class="bg-surf border border-line rounded-[18px] p-4.5">
+    <div class="app-card p-4.5">
       <!-- Toolbar Controls -->
       <div class="flex gap-2.5 flex-wrap items-center justify-between mb-3.5">
         <!-- Status Filter Chips -->

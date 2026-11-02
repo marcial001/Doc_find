@@ -102,7 +102,7 @@ onUnmounted(() => {
     <!-- Empty Queue State -->
     <div
       v-if="submissionsStore.submissions.length === 0"
-      class="bg-surf border border-line rounded-[18px] p-12 text-center text-mute"
+      class="app-card p-12 text-center text-mute"
     >
       <div class="text-4xl mb-3">✅</div>
       <h3 class="font-display font-bold text-lg text-ink">Queue is clear</h3>
@@ -169,7 +169,7 @@ onUnmounted(() => {
         <!-- Side-by-side Document Preview Cards -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
           <!-- Original Preview (Admin Only) -->
-          <div class="bg-surf border border-line rounded-[18px] p-4.5">
+          <div class="app-card p-4.5">
             <div class="flex justify-between items-center text-xs font-semibold text-mute mb-2">
               <span>ORIGINAL · ADMIN ONLY</span>
             </div>
@@ -183,7 +183,7 @@ onUnmounted(() => {
           </div>
 
           <!-- Public Redacted Preview -->
-          <div class="bg-surf border border-line rounded-[18px] p-4.5">
+          <div class="app-card p-4.5">
             <div class="flex justify-between items-center text-xs font-semibold text-mute mb-2">
               <span>PUBLIC LISTING PREVIEW</span>
               <AppPill variant="default">Live preview</AppPill>
@@ -199,7 +199,7 @@ onUnmounted(() => {
         <!-- Redaction Controls & Finder/Consent Grid -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
           <!-- Redaction Controls -->
-          <div class="bg-surf border border-line rounded-[18px] p-4.5">
+          <div class="app-card p-4.5">
             <div class="text-xs font-semibold text-mute mb-2">
               <span>REDACTION</span>
             </div>
@@ -265,7 +265,7 @@ onUnmounted(() => {
           </div>
 
           <!-- Finder and Consent Card -->
-          <div class="bg-surf border border-line rounded-[18px] p-4.5">
+          <div class="app-card p-4.5">
             <div class="text-xs font-semibold text-mute mb-2">
               <span>FINDER AND CONSENT</span>
             </div>
@@ -299,7 +299,7 @@ onUnmounted(() => {
         </div>
 
         <!-- Action Buttons Card -->
-        <div class="bg-surf border border-line rounded-[18px] p-4.5 flex gap-2.5 items-center flex-wrap">
+        <div class="app-card p-4.5 flex gap-2.5 items-center flex-wrap">
           <AppButton
             variant="primary"
             :disabled="!selectedSubmission.consent[0] || !selectedSubmission.consent[1]"
