@@ -396,3 +396,131 @@ All reference screenshots are located in `design/screenshots/`.
 - **Full Name**: Minimum 2 characters.
 - **Exact Place**: Minimum 3 characters.
 - **Claim Answer**: Minimum 2 characters.
+
+---
+
+## 5. Admin Dashboard Screen & Component Inventory (`apps/admin`)
+
+Reference wireframe: `design/doc-find-admin.html` (1280×800 desktop, 390×844 responsive mobile)
+
+### 5.1 Overview View (`/`)
+- **Route**: `/`
+- **Component**: `src/features/overview/OverviewView.vue`
+- **Key Metrics (KPI Cards)**:
+  - Total Reports (`1,284`, `+12% this week`)
+  - Pending Review Queue (`24 items`, badge)
+  - Active Verified Claims (`18 claims`)
+  - Successful Returns (`412 documents returned`)
+- **Activity Visualizer**: 7-day dual-bar activity chart comparing incoming reports vs completed handoffs.
+- **Needs Attention Widget**: Shortcut to high-risk claims or queued items pending > 24 hours.
+- **Recent Audit Activity**: Live feed displaying latest moderator approvals, rejections, and handoff closures.
+
+### 5.2 Review Queue View (`/queue`)
+- **Route**: `/queue`
+- **Component**: `src/features/review/ReviewView.vue`
+- **Layout**: Adaptive master-detail (two-column on desktop; stacked with `← Back to list` on mobile screens < 820px).
+- **Queue Master List**:
+  - Item cards displaying document type badge, submission date, quality score badge (`Good`, `Review`, `Poor`), and finder town.
+- **Review Detail Panel**:
+  - **Quality Score Pill**: Real-time quality rating based on sharpness, lighting, and framing.
+  - **Unredacted Original Document**: Locked behind frosted glass overlay with warning text: `Original is hidden · Viewing is logged`.
+  - **Sensitive Reveal Action**: Clicking unmasks original image and dispatches a high-priority audit log entry (`s: 1`, Sensitive) under Cameroon Law No. 2024/017.
+  - **Public Redaction Preview**: Live preview showing applied blur/masking over sensitive attributes (CNI ID, date of birth, mother's name).
+  - **Blur Strength Slider**: Range slider (2px to 14px) updating redaction strength in real-time.
+  - **Consent Verification Checks**: Explicit verification indicators confirming finder photo and location processing consents.
+  - **Action Bar**:
+    - `Approve` button (hotkey `A`): Publishes document to live public listings feed and records audit event.
+    - `Reject` button (hotkey `R`): Opens rejection modal sheet.
+  - **Reject Modal Sheet**: Selectable rejection reasons (`Unreadable / blurry`, `Inappropriate content`, `Fraudulent or duplicate`, `Other`) with optional custom note.
+  - **Keyboard Navigation**: `ArrowUp` / `ArrowDown` to navigate list items, `A` to approve, `R` to reject.
+
+### 5.3 Claims Verification View (`/claims`)
+- **Route**: `/claims`
+- **Component**: `src/features/claims/ClaimsView.vue`
+- **Layout**: Adaptive master-detail list and detail panel.
+- **Claims Master List**:
+  - Item cards displaying claimant initials, document type, submission time, and risk level pill (`Low Risk` in green, `Medium Risk` in orange, `High Risk` in red).
+- **Claim Detail Panel**:
+  - **Side-by-Side Proof Verification Table**:
+    - Attribute | Document Record Value | Claimant Stated Answer | Match Indicator (✓ Match / ✗ Mismatch)
+  - **Risk Assessment Box**: Fraud heuristics and risk score breakdown.
+  - **Claimant Communication Drawer**:
+    - Message history feed.
+    - Quick-reply chips ("Please provide issuing date", "Pickup point assigned", "Proof validated").
+    - Custom message input with simulated claimant response.
+  - **Handoff Coordination Modal Sheet**:
+    - Cameroon pickup locations dropdown (Douala, Yaoundé, Bafoussam, Bamenda, Garoua, Buea).
+    - Pickup schedule date/time selector.
+    - Completion trigger: Marks claim as `Handed Off` and listing as `Recovered`.
+
+### 5.4 Listings Management View (`/listings`)
+- **Route**: `/listings`
+- **Component**: `src/features/listings/ListingsView.vue`
+- **Filter Tabs**: `All`, `Live (Published)`, `Recovered`, `Archived`.
+- **Search & Filters**: Debounced document number search, document type filter, and town dropdown filter.
+- **Auto-Archive Policy Banner**: Explains 90-day auto-archive policy in compliance with Cameroon Law No. 2024/017 data retention standards.
+- **Listings Table**:
+  - Columns: Document ID, Type, Holder Name Mask, Issuing Town, Found Spot, Published Date, Status, Actions.
+  - Actions: `Mark Recovered`, `Archive`, `Restore`.
+- **Partner CSV Bulk Upload Sheet**:
+  - Upload modal sheet allowing police stations, councils, and transport agencies to import bulk records.
+  - Animated progress bar and validation feedback.
+
+### 5.5 Fraud Reports View (`/fraud`)
+- **Route**: `/fraud`
+- **Component**: `src/features/fraud/FraudView.vue`
+- **Grid Layout**: Responsive card grid of reported incidents.
+- **Fraud Card**:
+  - Reported user ID, reporter phone, violation category (e.g., Extortion, Fake document, Ransom demand), timestamp.
+  - Actions: `Suspend User` (deactivates account and cancels associated claims) and `Dismiss Report`.
+
+### 5.6 Audit Trail View (`/audit`)
+- **Route**: `/audit`
+- **Component**: `src/features/audit/AuditView.vue`
+- **Sensitive Filter Toggle**: `?sensitive_only=true` checkbox isolating sensitive unredacted data access events.
+- **Audit Table**:
+  - Timestamp, Operator, Action Type, Target Entity, Law 2024/017 Sensitive Tag (`Sensitive` pill), IP/User-Agent metadata.
+
+### 5.7 System Settings View (`/settings`)
+- **Route**: `/settings`
+- **Component**: `src/features/settings/SettingsView.vue`
+- **Sections**:
+  - Moderation Policy: Quality thresholds, default blur radius, auto-rejection rules.
+  - Data Retention (Law No. 2024/017): 90-day retention countdown, unredacted original deletion timeline.
+  - Interface Preferences: Language toggle (`en` / `fr`), Theme mode (`System`, `Light`, `Dark`).
+
+---
+
+## 6. Backend API Service Map (`services/api`)
+
+Base URL: `http://localhost:8000/api/v1`  
+Interactive OpenAPI / Swagger UI: `http://localhost:8000/docs`
+
+| HTTP Method | Endpoint | Description | Auth Required | Law 2024/017 Protection |
+|---|---|---|---|---|
+| `GET` | `/health` | Service health status check | No | None |
+| `POST` | `/api/v1/auth/register` | User signup with mandatory data consent | No | Rejects if `consent=False` |
+| `POST` | `/api/v1/auth/login` | Bearer token generation (OAuth2 password flow) | No | Native bcrypt validation |
+| `GET` | `/api/v1/auth/me` | Fetch authenticated user profile | Yes | Token required |
+| `POST` | `/api/v1/submissions/` | Create finder document submission | Yes | Requires `photo_consent` & `location_consent` |
+| `GET` | `/api/v1/submissions/my` | List current user's submitted reports | Yes | Scoped to authenticated user |
+| `GET` | `/api/v1/listings/` | Search & list approved public listings | No | Unredacted phone & details strictly isolated |
+| `GET` | `/api/v1/listings/{id}` | Retrieve single public listing detail | No | Masked name and redactions preserved |
+| `POST` | `/api/v1/claims/` | Submit ownership claim with proof answer | Yes | Encrypted claimant answer comparison |
+| `GET` | `/api/v1/claims/my` | List current user's claims | Yes | User-scoped |
+| `POST` | `/api/v1/claims/{id}/messages` | Send message in claim discussion thread | Yes | Participants only |
+| `GET` | `/api/v1/alerts/` | List user search alert subscriptions | Yes | User-scoped |
+| `POST` | `/api/v1/alerts/` | Create new search notification alert | Yes | User-scoped |
+| `DELETE` | `/api/v1/alerts/{id}` | Delete search notification alert | Yes | User-scoped |
+| `GET` | `/api/v1/admin/overview` | Fetch admin KPI summary metrics | Yes (Admin) | Aggregated non-PII metrics |
+| `GET` | `/api/v1/admin/queue` | List pending submissions for moderation | Yes (Admin) | Admin role enforced |
+| `POST` | `/api/v1/admin/queue/{id}/approve`| Approve submission & publish listing | Yes (Admin) | Dispatches audit log entry |
+| `POST` | `/api/v1/admin/queue/{id}/reject` | Reject submission with formal reason | Yes (Admin) | Dispatches audit log entry |
+| `POST` | `/api/v1/admin/queue/{id}/reveal` | Unmask unredacted original photo | Yes (Admin) | Logs `is_sensitive=True` audit event |
+| `GET` | `/api/v1/admin/claims/{id}` | Inspect claim verification details | Yes (Admin) | Admin role enforced |
+| `POST` | `/api/v1/admin/claims/{id}/status`| Update claim status (approved, rejected, handed_off) | Yes (Admin) | Dispatches audit log entry |
+| `POST` | `/api/v1/admin/listings/{id}/status`| Update listing status (live, recovered, archived) | Yes (Admin) | Dispatches audit log entry |
+| `GET` | `/api/v1/admin/fraud` | List active fraud reports | Yes (Admin) | Admin role enforced |
+| `POST` | `/api/v1/admin/fraud/{id}/action` | Suspend reported user or dismiss report | Yes (Admin) | Dispatches audit log entry |
+| `GET` | `/api/v1/admin/audit` | Query audit trail with `sensitive_only` filter | Yes (Admin) | Complete access traceability |
+
