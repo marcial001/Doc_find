@@ -403,6 +403,20 @@ All reference screenshots are located in `design/screenshots/`.
 
 Reference wireframe: `design/doc-find-admin.html` (1280×800 desktop, 390×844 responsive mobile)
 
+### 5.0 Admin Login View (`/login`)
+- **Route**: `/login`
+- **Component**: `src/features/auth/LoginView.vue`
+- **Branding & Purpose**: Dedicated fullscreen portal entrypoint for verified moderators and administrators.
+- **Form Controls**:
+  - Email input with SVG mail icon (`admin@docfind.cm` demo)
+  - Password input with SVG lock icon, show/hide eye toggle (`admin1234` demo)
+  - "Remember this session" checkbox
+  - "⚡ Auto-fill Demo Moderator" 1-click credential filler
+  - Primary "Sign in to Admin Console" submit button with animated spinner
+- **Compliance & Security**:
+  - Law No. 2024/017 compliance badge and statutory audit disclosure notice.
+  - Quick language toggle (`EN` / `FR`) and theme toggle (`Light` / `Dark`) in top header.
+
 ### 5.1 Overview View (`/`)
 - **Route**: `/`
 - **Component**: `src/features/overview/OverviewView.vue`

@@ -81,6 +81,11 @@ function isActive(path: string) {
 function navigate(path: string) {
   router.push(path)
 }
+
+function handleLogout() {
+  authStore.logout()
+  router.push('/login')
+}
 </script>
 
 <template>
@@ -130,14 +135,29 @@ function navigate(path: string) {
     </div>
 
     <!-- User Profile (Desktop only) -->
-    <div class="hidden md:flex mt-auto gap-2.5 items-center p-3 border-t border-white/15 text-[13px]">
-      <div class="flex-none w-9 h-9 rounded-full bg-sun text-[#111] grid place-items-center font-extrabold text-sm">
-        {{ authStore.user.initials }}
+    <div class="hidden md:flex mt-auto gap-2.5 items-center p-3 border-t border-white/15 text-[13px] justify-between">
+      <div class="flex items-center gap-2.5 min-w-0">
+        <div class="flex-none w-9 h-9 rounded-full bg-sun text-[#111] grid place-items-center font-extrabold text-sm">
+          {{ authStore.user.initials }}
+        </div>
+        <div class="min-w-0">
+          <div class="font-bold text-white leading-tight truncate">{{ authStore.user.name }}</div>
+          <small class="opacity-60 text-xs block truncate">{{ authStore.user.role }} · {{ authStore.user.location }}</small>
+        </div>
       </div>
-      <div>
-        <div class="font-bold text-white leading-tight">{{ authStore.user.name }}</div>
-        <small class="opacity-60 text-xs">{{ authStore.user.role }} · {{ authStore.user.location }}</small>
-      </div>
+      <button
+        type="button"
+        class="p-1.5 rounded-lg text-[#B9CBC1] hover:text-white hover:bg-white/10 transition cursor-pointer flex-none"
+        title="Sign out"
+        aria-label="Sign out"
+        @click="handleLogout"
+      >
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+          <polyline points="16 17 21 12 16 7" />
+          <line x1="21" y1="12" x2="9" y2="12" />
+        </svg>
+      </button>
     </div>
   </aside>
 </template>

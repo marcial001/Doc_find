@@ -6,8 +6,15 @@ import ListingsView from '../features/listings/ListingsView.vue'
 import FraudView from '../features/fraud/FraudView.vue'
 import AuditView from '../features/audit/AuditView.vue'
 import SettingsView from '../features/settings/SettingsView.vue'
+import LoginView from '../features/auth/LoginView.vue'
 
 export const routes = [
+  {
+    path: '/login',
+    name: 'login',
+    component: LoginView,
+    meta: { title: 'Sign In' }
+  },
   {
     path: '/',
     name: 'overview',
