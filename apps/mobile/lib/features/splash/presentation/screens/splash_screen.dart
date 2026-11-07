@@ -133,7 +133,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     } else if (!authState.isAuthenticated) {
       context.go(RoutePaths.auth);
     } else {
-      context.go(RoutePaths.search);
+      context.go(RoutePaths.home);
     }
   }
 

@@ -168,14 +168,14 @@ class ShellScreen extends ConsumerWidget {
         unreadMessagesCount: unreadCount,
         onTabSelected: (NavTab tab) {
           switch (tab) {
+            case NavTab.home:
+              context.go(RoutePaths.home);
+              break;
             case NavTab.search:
               context.go(RoutePaths.search);
               break;
             case NavTab.report:
               context.go(RoutePaths.report);
-              break;
-            case NavTab.messages:
-              context.go(RoutePaths.messages);
               break;
             case NavTab.alerts:
               context.go(RoutePaths.alerts);

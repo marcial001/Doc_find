@@ -32,9 +32,9 @@ void main() {
     expect(find.text('Shell Content Body'), findsOneWidget);
     expect(find.byIcon(Icons.notifications_none_rounded), findsNWidgets(2));
     expect(find.text('DF'), findsOneWidget);
+    expect(find.text('Home'), findsOneWidget);
     expect(find.text('Search'), findsOneWidget);
     expect(find.text('Report'), findsOneWidget);
-    expect(find.text('Messages'), findsOneWidget);
     expect(find.text('Alerts'), findsOneWidget);
   });
 }

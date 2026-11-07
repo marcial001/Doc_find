@@ -6,6 +6,26 @@ import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
 import 'core/theme/theme_controller.dart';
 
+/// Custom scroll behavior disabling Android 12+ elastic stretch overscroll.
+/// Enforces clean, fixed clamping physics at viewport boundaries.
+class NoStretchScrollBehavior extends MaterialScrollBehavior {
+  const NoStretchScrollBehavior();
+
+  @override
+  Widget buildOverscrollIndicator(
+    BuildContext context,
+    Widget child,
+    ScrollableDetails details,
+  ) {
+    return child;
+  }
+
+  @override
+  ScrollPhysics getScrollPhysics(BuildContext context) {
+    return const ClampingScrollPhysics();
+  }
+}
+
 class DocFindApp extends ConsumerWidget {
   const DocFindApp({super.key});
 
@@ -25,6 +45,7 @@ class DocFindApp extends ConsumerWidget {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       routerConfig: router,
+      scrollBehavior: const NoStretchScrollBehavior(),
     );
   }
 }

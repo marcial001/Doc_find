@@ -4,9 +4,9 @@ import '../theme/app_motion.dart';
 import '../theme/app_typography.dart';
 
 enum NavTab {
+  home('Home', Icons.home_rounded),
   search('Search', Icons.search_rounded),
   report('Report', Icons.add_circle_outline_rounded),
-  messages('Messages', Icons.chat_bubble_outline_rounded),
   alerts('Alerts', Icons.notifications_none_rounded);
 
   const NavTab(this.label, this.icon);
@@ -81,8 +81,7 @@ class AppBottomNav extends StatelessWidget {
                   Row(
                     children: NavTab.values.map((NavTab tab) {
                       final bool isSelected = tab == currentTab;
-                      final bool showBadge =
-                          tab == NavTab.messages && unreadMessagesCount > 0;
+                      final bool showBadge = false;
 
                       return Expanded(
                         child: Material(

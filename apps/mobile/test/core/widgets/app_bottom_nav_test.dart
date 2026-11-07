@@ -27,10 +27,15 @@ void main() {
         ),
       );
 
+      expect(find.text('Home'), findsOneWidget);
       expect(find.text('Search'), findsOneWidget);
       expect(find.text('Report'), findsOneWidget);
-      expect(find.text('Messages'), findsOneWidget);
       expect(find.text('Alerts'), findsOneWidget);
+
+      await tester.tap(find.text('Home'));
+      await tester.pumpAndSettle();
+
+      expect(selected, NavTab.home);
 
       await tester.tap(find.text('Report'));
       await tester.pumpAndSettle();

@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../features/alerts/presentation/screens/alerts_screen.dart';
 import '../../features/auth/presentation/controllers/auth_controller.dart';
 import '../../features/auth/presentation/screens/auth_screen.dart';
+import '../../features/home/presentation/screens/home_screen.dart';
 import '../../features/listing_detail/presentation/screens/listing_detail_screen.dart';
 import '../../features/messages/presentation/screens/chat_screen.dart';
 import '../../features/messages/presentation/screens/messages_screen.dart';
@@ -34,9 +35,9 @@ final Provider<GoRouter> routerProvider = Provider<GoRouter>((Ref ref) {
         return RoutePaths.auth;
       }
 
-      // If user is already authenticated and on /auth, redirect to /search
+      // If user is already authenticated and on /auth, redirect to /home
       if (authState.isAuthenticated && loc == RoutePaths.auth) {
-        return RoutePaths.search;
+        return RoutePaths.home;
       }
 
       return null;
@@ -58,6 +59,17 @@ final Provider<GoRouter> routerProvider = Provider<GoRouter>((Ref ref) {
             const AuthScreen(),
       ),
       // App Shell Routes
+      GoRoute(
+        path: RoutePaths.home,
+        pageBuilder: (BuildContext context, GoRouterState state) {
+          return const NoTransitionPage<void>(
+            child: ShellScreen(
+              currentTab: NavTab.home,
+              child: HomeScreen(),
+            ),
+          );
+        },
+      ),
       GoRoute(
         path: RoutePaths.search,
         pageBuilder: (BuildContext context, GoRouterState state) {
@@ -97,7 +109,7 @@ final Provider<GoRouter> routerProvider = Provider<GoRouter>((Ref ref) {
         pageBuilder: (BuildContext context, GoRouterState state) {
           return const NoTransitionPage<void>(
             child: ShellScreen(
-              currentTab: NavTab.messages,
+              currentTab: NavTab.home,
               child: MessagesScreen(),
             ),
           );

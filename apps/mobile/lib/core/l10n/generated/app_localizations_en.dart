@@ -117,6 +117,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get navHome => 'Home';
+
+  @override
   String get navSearch => 'Search';
 
   @override
@@ -127,6 +130,71 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get navAlerts => 'Alerts';
+
+  @override
+  String get homeHeroTitle1 => 'Lost or Found a Document?';
+
+  @override
+  String get homeHeroSub1 =>
+      'Cameroon\'s national recovery platform connecting lost IDs, Passports, and Certificates safely.';
+
+  @override
+  String get homeHeroAction1 => 'Search Documents';
+
+  @override
+  String get homeHeroTitle2 => 'Privacy by Law No. 2024/017';
+
+  @override
+  String get homeHeroSub2 =>
+      'Every document photo is automatically masked and encrypted. Sensitive PII stays protected.';
+
+  @override
+  String get homeHeroAction2 => 'Privacy Protected';
+
+  @override
+  String get homeHeroTitle3 => 'Verified Safe Handoffs';
+
+  @override
+  String get homeHeroSub3 =>
+      'Secret questions and official partner points protect both finder and owner during return.';
+
+  @override
+  String get homeHeroAction3 => 'Report a Document';
+
+  @override
+  String get homeHeroTitle4 => 'Instant Cameroon-Wide Alerts';
+
+  @override
+  String get homeHeroSub4 =>
+      'Create personalized alerts for your town or document and get notified the moment it is found.';
+
+  @override
+  String get homeHeroAction4 => 'Set Search Alert';
+
+  @override
+  String get homeQuickSearch => 'Search Lost';
+
+  @override
+  String get homeQuickReport => 'Report Found';
+
+  @override
+  String get homeQuickAlerts => 'New Alert';
+
+  @override
+  String get homeRecentDocs => 'Recently Found Documents';
+
+  @override
+  String get homeViewAll => 'View all';
+
+  @override
+  String get homeChatAdmin => 'Chat with Admin';
+
+  @override
+  String get homeChatAdminTooltip => 'Open direct chat with Doc-Find Admin';
+
+  @override
+  String get homeTrustBadge =>
+      'Complies with Cameroon Data Protection Law No. 2024/017';
 
   @override
   String get searchTitle => 'Find a lost document';

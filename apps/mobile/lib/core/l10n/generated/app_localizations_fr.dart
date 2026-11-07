@@ -119,6 +119,9 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
+  String get navHome => 'Accueil';
+
+  @override
   String get navSearch => 'Recherche';
 
   @override
@@ -129,6 +132,72 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get navAlerts => 'Alertes';
+
+  @override
+  String get homeHeroTitle1 => 'Document perdu ou retrouvé ?';
+
+  @override
+  String get homeHeroSub1 =>
+      'La plateforme nationale au Cameroun qui connecte vos CNI, passeports et actes perdus en toute sécurité.';
+
+  @override
+  String get homeHeroAction1 => 'Rechercher un document';
+
+  @override
+  String get homeHeroTitle2 => 'Protection Loi N° 2024/017';
+
+  @override
+  String get homeHeroSub2 =>
+      'Toutes les photos sont automatiquement masquées et chiffrées. Les données personnelles sensibles restent protégées.';
+
+  @override
+  String get homeHeroAction2 => 'Confidentialité garantie';
+
+  @override
+  String get homeHeroTitle3 => 'Remises sécurisées et vérifiées';
+
+  @override
+  String get homeHeroSub3 =>
+      'Une question secrète et des points relais officiels protègent propriétaire et inventeur lors de la restitution.';
+
+  @override
+  String get homeHeroAction3 => 'Signaler un document';
+
+  @override
+  String get homeHeroTitle4 => 'Alertes instantanées 10 régions';
+
+  @override
+  String get homeHeroSub4 =>
+      'Créez une alerte personnalisée pour votre ville ou type de pièce et soyez alerté dès sa publication.';
+
+  @override
+  String get homeHeroAction4 => 'Créer une alerte';
+
+  @override
+  String get homeQuickSearch => 'Recherche';
+
+  @override
+  String get homeQuickReport => 'Signaler';
+
+  @override
+  String get homeQuickAlerts => 'Nouvelle alerte';
+
+  @override
+  String get homeRecentDocs => 'Documents récemment signalés';
+
+  @override
+  String get homeViewAll => 'Tout voir';
+
+  @override
+  String get homeChatAdmin => 'Contacter l\'administrateur';
+
+  @override
+  String get homeChatAdminTooltip =>
+      'Discuter directement avec l\'administration Doc-Find';
+
+  @override
+  String get homeTrustBadge =>
+      'Conforme à la Loi N° 2024/017 sur la protection des données au Cameroun';
 
   @override
   String get searchTitle => 'Trouver un document perdu';

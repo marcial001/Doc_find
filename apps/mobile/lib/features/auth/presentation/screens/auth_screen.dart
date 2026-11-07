@@ -110,7 +110,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen>
       final user = ref.read(authControllerProvider).user;
       final String name = user != null ? user.name.split(' ').first : '';
       AppToast.show(context, context.l10n.authWelcomeToast(name));
-      context.go(RoutePaths.search);
+      context.go(RoutePaths.home);
     } else {
       _triggerShake();
     }
@@ -177,7 +177,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen>
       final user = ref.read(authControllerProvider).user;
       final String shortName = user != null ? user.name.split(' ').first : '';
       AppToast.show(context, context.l10n.authWelcomeToast(shortName));
-      context.go(RoutePaths.search);
+      context.go(RoutePaths.home);
     } else {
       _triggerShake();
     }

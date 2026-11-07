@@ -296,6 +296,12 @@ abstract class AppLocalizations {
   /// **'Welcome, {name}'**
   String authWelcomeToast(String name);
 
+  /// No description provided for @navHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get navHome;
+
   /// No description provided for @navSearch.
   ///
   /// In en, this message translates to:
@@ -319,6 +325,126 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Alerts'**
   String get navAlerts;
+
+  /// No description provided for @homeHeroTitle1.
+  ///
+  /// In en, this message translates to:
+  /// **'Lost or Found a Document?'**
+  String get homeHeroTitle1;
+
+  /// No description provided for @homeHeroSub1.
+  ///
+  /// In en, this message translates to:
+  /// **'Cameroon\'s national recovery platform connecting lost IDs, Passports, and Certificates safely.'**
+  String get homeHeroSub1;
+
+  /// No description provided for @homeHeroAction1.
+  ///
+  /// In en, this message translates to:
+  /// **'Search Documents'**
+  String get homeHeroAction1;
+
+  /// No description provided for @homeHeroTitle2.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy by Law No. 2024/017'**
+  String get homeHeroTitle2;
+
+  /// No description provided for @homeHeroSub2.
+  ///
+  /// In en, this message translates to:
+  /// **'Every document photo is automatically masked and encrypted. Sensitive PII stays protected.'**
+  String get homeHeroSub2;
+
+  /// No description provided for @homeHeroAction2.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Protected'**
+  String get homeHeroAction2;
+
+  /// No description provided for @homeHeroTitle3.
+  ///
+  /// In en, this message translates to:
+  /// **'Verified Safe Handoffs'**
+  String get homeHeroTitle3;
+
+  /// No description provided for @homeHeroSub3.
+  ///
+  /// In en, this message translates to:
+  /// **'Secret questions and official partner points protect both finder and owner during return.'**
+  String get homeHeroSub3;
+
+  /// No description provided for @homeHeroAction3.
+  ///
+  /// In en, this message translates to:
+  /// **'Report a Document'**
+  String get homeHeroAction3;
+
+  /// No description provided for @homeHeroTitle4.
+  ///
+  /// In en, this message translates to:
+  /// **'Instant Cameroon-Wide Alerts'**
+  String get homeHeroTitle4;
+
+  /// No description provided for @homeHeroSub4.
+  ///
+  /// In en, this message translates to:
+  /// **'Create personalized alerts for your town or document and get notified the moment it is found.'**
+  String get homeHeroSub4;
+
+  /// No description provided for @homeHeroAction4.
+  ///
+  /// In en, this message translates to:
+  /// **'Set Search Alert'**
+  String get homeHeroAction4;
+
+  /// No description provided for @homeQuickSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Search Lost'**
+  String get homeQuickSearch;
+
+  /// No description provided for @homeQuickReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Report Found'**
+  String get homeQuickReport;
+
+  /// No description provided for @homeQuickAlerts.
+  ///
+  /// In en, this message translates to:
+  /// **'New Alert'**
+  String get homeQuickAlerts;
+
+  /// No description provided for @homeRecentDocs.
+  ///
+  /// In en, this message translates to:
+  /// **'Recently Found Documents'**
+  String get homeRecentDocs;
+
+  /// No description provided for @homeViewAll.
+  ///
+  /// In en, this message translates to:
+  /// **'View all'**
+  String get homeViewAll;
+
+  /// No description provided for @homeChatAdmin.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat with Admin'**
+  String get homeChatAdmin;
+
+  /// No description provided for @homeChatAdminTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Open direct chat with Doc-Find Admin'**
+  String get homeChatAdminTooltip;
+
+  /// No description provided for @homeTrustBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Complies with Cameroon Data Protection Law No. 2024/017'**
+  String get homeTrustBadge;
 
   /// No description provided for @searchTitle.
   ///
